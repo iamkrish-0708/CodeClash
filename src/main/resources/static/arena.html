@@ -257,18 +257,15 @@
 
   <script src="js/api.js"></script>
   <script>
+    const urlParams = new URLSearchParams(window.location.search);
     let editorInstance = null;
-    let currentProblemId = null;
-    let currentMatchId = null;
+    let currentProblemId = urlParams.get('problemId') || null;
+    let currentMatchId = urlParams.get('matchId') || null;
     let currentUser = null;
     let matchPollTimer = null;
     let matchEnded = false;
-    let countdownInterval = null;
+    let problemLoaded = false;
     let remainingSec = 0;
-
-    const urlParams = new URLSearchParams(window.location.search);
-    currentProblemId = urlParams.get('problemId') || null;
-    currentMatchId = urlParams.get('matchId') || null;
 
     async function init() {
       try {
@@ -278,13 +275,15 @@
         document.getElementById('userStatus').innerText = `Guest Mode`;
       }
 
+      if (currentProblemId) {
+        loadProblem(currentProblemId);
+      }
+
       if (currentMatchId) {
         document.getElementById('opponentBadge').style.display = 'block';
         document.getElementById('surrenderBtn').style.display = 'inline-flex';
         await pollMatch();
         matchPollTimer = setInterval(pollMatch, 1500); // 1.5s match polling
-      } else if (currentProblemId) {
-        loadProblem(currentProblemId);
       }
     }
 
@@ -292,7 +291,7 @@
       if (matchEnded) return;
       try {
         const match = await API.getMatchStatus(currentMatchId);
-        if (!currentProblemId) {
+        if (!problemLoaded && match.problemId) {
           currentProblemId = match.problemId;
           loadProblem(match.problemId);
         }
