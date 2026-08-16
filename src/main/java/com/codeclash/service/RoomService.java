@@ -7,15 +7,12 @@ import com.codeclash.model.User;
 import com.codeclash.repository.MatchRepository;
 import com.codeclash.repository.RoomRepository;
 import com.codeclash.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
-import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class RoomService {
 
     private final RoomRepository roomRepository;
@@ -23,6 +20,12 @@ public class RoomService {
     private final MatchRepository matchRepository;
     private static final String CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     private static final SecureRandom RANDOM = new SecureRandom();
+
+    public RoomService(RoomRepository roomRepository, UserRepository userRepository, MatchRepository matchRepository) {
+        this.roomRepository = roomRepository;
+        this.userRepository = userRepository;
+        this.matchRepository = matchRepository;
+    }
 
     @Transactional
     public RoomDto createRoom(Long hostUserId) {
@@ -54,7 +57,7 @@ public class RoomService {
         }
 
         if (room.getHostUser().getId().equals(guestUserId)) {
-            return toDto(room); // Host rejoining own room
+            return toDto(room);
         }
 
         if (room.getGuestUser() != null && !room.getGuestUser().getId().equals(guestUserId)) {

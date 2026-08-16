@@ -3,8 +3,8 @@ package com.codeclash.service;
 import com.codeclash.dto.MatchStatusDto;
 import com.codeclash.model.*;
 import com.codeclash.repository.*;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,13 +12,12 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 public class MatchService {
+
+    private static final Logger log = LoggerFactory.getLogger(MatchService.class);
 
     private final MatchRepository matchRepository;
     private final RoomRepository roomRepository;
@@ -29,6 +28,16 @@ public class MatchService {
     private final EloService eloService;
 
     private static final Random RANDOM = new Random();
+
+    public MatchService(MatchRepository matchRepository, RoomRepository roomRepository, ProblemRepository problemRepository, MatchPlayerRepository matchPlayerRepository, UserRepository userRepository, SubmissionRepository submissionRepository, EloService eloService) {
+        this.matchRepository = matchRepository;
+        this.roomRepository = roomRepository;
+        this.problemRepository = problemRepository;
+        this.matchPlayerRepository = matchPlayerRepository;
+        this.userRepository = userRepository;
+        this.submissionRepository = submissionRepository;
+        this.eloService = eloService;
+    }
 
     @Transactional
     public MatchStatusDto startMatch(Long roomId, Long optionalProblemId, Long hostUserId) {
@@ -68,7 +77,6 @@ public class MatchService {
 
         Match savedMatch = matchRepository.save(match);
 
-        // Create MatchPlayer entries for Host and Guest
         MatchPlayer playerHost = MatchPlayer.builder()
                 .match(savedMatch)
                 .user(room.getHostUser())
@@ -99,7 +107,6 @@ public class MatchService {
         Match match = matchRepository.findById(matchId)
                 .orElseThrow(() -> new IllegalArgumentException("Match not found: " + matchId));
 
-        // Auto-finish if time expired and still active
         if (match.getStatus() == Match.MatchStatus.ACTIVE && LocalDateTime.now().isAfter(match.getEndsAt())) {
             finalizeMatch(match);
         }
@@ -159,11 +166,9 @@ public class MatchService {
         mp.setTimeTakenSeconds(timeTaken);
         matchPlayerRepository.save(mp);
 
-        // If player achieved 100% (ACCEPTED), they win immediately!
         if (isAccepted && passedTests == totalTests) {
             finalizeMatchWithWinner(match, mp.getUser());
         } else {
-            // Check if both players have submitted
             List<MatchPlayer> allPlayers = matchPlayerRepository.findByMatchId(matchId);
             boolean allSubmitted = allPlayers.stream().allMatch(p -> p.getTimeTakenSeconds() != null);
             if (allSubmitted) {
@@ -219,7 +224,6 @@ public class MatchService {
             match.setWinnerUser(p2.getUser());
             applyEloAndStats(match, p2.getUser().getId(), false);
         } else {
-            // Tie-breaker: Time taken
             int time1 = p1.getTimeTakenSeconds() != null ? p1.getTimeTakenSeconds() : Integer.MAX_VALUE;
             int time2 = p2.getTimeTakenSeconds() != null ? p2.getTimeTakenSeconds() : Integer.MAX_VALUE;
 
@@ -232,7 +236,6 @@ public class MatchService {
                 match.setWinnerUser(p2.getUser());
                 applyEloAndStats(match, p2.getUser().getId(), false);
             } else {
-                // Draw
                 match.setStatus(Match.MatchStatus.DRAW);
                 applyEloAndStats(match, null, true);
             }
@@ -264,11 +267,9 @@ public class MatchService {
         matchPlayerRepository.save(p1);
         matchPlayerRepository.save(p2);
 
-        // Update User records
         updateUserStats(u1, p1.getResult(), eloResult.newRatingA());
         updateUserStats(u2, p2.getResult(), eloResult.newRatingB());
 
-        // Update room status
         Room room = match.getRoom();
         room.setStatus(Room.RoomStatus.COMPLETED);
         roomRepository.save(room);

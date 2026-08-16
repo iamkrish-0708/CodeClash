@@ -2,7 +2,8 @@ package com.codeclash.service;
 
 import com.codeclash.dto.ExecutionResult;
 import com.codeclash.model.TestCase;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -17,10 +18,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-@Slf4j
 public class LocalJavaExecutionService implements CodeExecutionService {
 
-    private static final int PER_TEST_CASE_TIMEOUT_MS = 3000; // 3 sec max per test case
+    private static final Logger log = LoggerFactory.getLogger(LocalJavaExecutionService.class);
+    private static final int PER_TEST_CASE_TIMEOUT_MS = 3000;
     private static final Pattern CLASS_NAME_PATTERN = Pattern.compile("public\\s+class\\s+([A-Za-z0-9_]+)");
 
     @Override
@@ -29,7 +30,6 @@ public class LocalJavaExecutionService implements CodeExecutionService {
         try {
             tempDir = Files.createTempDirectory("codeclash_exec_");
 
-            // Extract public class name or default to "Solution"
             String className = "Solution";
             Matcher matcher = CLASS_NAME_PATTERN.matcher(code);
             if (matcher.find()) {
@@ -73,7 +73,6 @@ public class LocalJavaExecutionService implements CodeExecutionService {
                 runPb.directory(tempDir.toFile());
                 Process runProcess = runPb.start();
 
-                // Pipe test case input
                 try (OutputStream os = runProcess.getOutputStream()) {
                     if (tc.getInputData() != null) {
                         os.write(tc.getInputData().getBytes(StandardCharsets.UTF_8));
@@ -81,7 +80,6 @@ public class LocalJavaExecutionService implements CodeExecutionService {
                     }
                 }
 
-                // Wait with watchdog
                 boolean finished = runProcess.waitFor(PER_TEST_CASE_TIMEOUT_MS, TimeUnit.MILLISECONDS);
                 long elapsed = System.currentTimeMillis() - startTime;
                 totalTimeMs += elapsed;
@@ -118,7 +116,6 @@ public class LocalJavaExecutionService implements CodeExecutionService {
                     break;
                 }
 
-                // Normalize line breaks and compare
                 boolean passed = normalizeOutput(actualOutput).equals(normalizeOutput(expectedOutput));
                 if (passed) {
                     passedCount++;

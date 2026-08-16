@@ -5,16 +5,18 @@ import com.codeclash.dto.ExecutionResult;
 import com.codeclash.service.SubmissionService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/submissions")
-@RequiredArgsConstructor
 public class SubmissionController {
 
     private final SubmissionService submissionService;
+
+    public SubmissionController(SubmissionService submissionService) {
+        this.submissionService = submissionService;
+    }
 
     @PostMapping("/run-sample")
     public ResponseEntity<ExecutionResult> runSampleTestCases(@Valid @RequestBody CodeExecutionRequest request) {

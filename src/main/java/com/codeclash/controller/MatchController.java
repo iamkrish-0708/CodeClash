@@ -3,7 +3,6 @@ package com.codeclash.controller;
 import com.codeclash.dto.MatchStatusDto;
 import com.codeclash.service.MatchService;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +10,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/matches")
-@RequiredArgsConstructor
 public class MatchController {
 
     private final MatchService matchService;
+
+    public MatchController(MatchService matchService) {
+        this.matchService = matchService;
+    }
 
     @PostMapping("/start")
     public ResponseEntity<?> startMatch(@RequestBody Map<String, Object> payload, HttpSession session) {

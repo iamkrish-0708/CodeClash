@@ -3,7 +3,6 @@ package com.codeclash.controller;
 import com.codeclash.model.Problem;
 import com.codeclash.model.TestCase;
 import com.codeclash.service.ProblemService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +10,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/problems")
-@RequiredArgsConstructor
 public class ProblemController {
 
     private final ProblemService problemService;
+
+    public ProblemController(ProblemService problemService) {
+        this.problemService = problemService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Problem>> getAllProblems() {

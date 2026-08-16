@@ -2,7 +2,6 @@ package com.codeclash.controller;
 
 import com.codeclash.model.User;
 import com.codeclash.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +11,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/leaderboard")
-@RequiredArgsConstructor
 public class LeaderboardController {
 
     private final UserRepository userRepository;
+
+    public LeaderboardController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping
     public ResponseEntity<Page<User>> getLeaderboard(

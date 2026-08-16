@@ -3,8 +3,8 @@ package com.codeclash.config;
 import com.codeclash.model.Problem;
 import com.codeclash.model.TestCase;
 import com.codeclash.repository.ProblemRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,11 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 public class DataInitializer implements CommandLineRunner {
 
+    private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
     private final ProblemRepository problemRepository;
+
+    public DataInitializer(ProblemRepository problemRepository) {
+        this.problemRepository = problemRepository;
+    }
 
     @Override
     @Transactional

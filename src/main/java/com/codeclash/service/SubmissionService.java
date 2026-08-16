@@ -4,8 +4,8 @@ import com.codeclash.dto.CodeExecutionRequest;
 import com.codeclash.dto.ExecutionResult;
 import com.codeclash.model.*;
 import com.codeclash.repository.*;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 public class SubmissionService {
+
+    private static final Logger log = LoggerFactory.getLogger(SubmissionService.class);
 
     private final CodeExecutionService executionService;
     private final ProblemRepository problemRepository;
@@ -24,6 +24,16 @@ public class SubmissionService {
     private final UserRepository userRepository;
     private final MatchRepository matchRepository;
     private final MatchService matchService;
+
+    public SubmissionService(CodeExecutionService executionService, ProblemRepository problemRepository, TestCaseRepository testCaseRepository, SubmissionRepository submissionRepository, UserRepository userRepository, MatchRepository matchRepository, MatchService matchService) {
+        this.executionService = executionService;
+        this.problemRepository = problemRepository;
+        this.testCaseRepository = testCaseRepository;
+        this.submissionRepository = submissionRepository;
+        this.userRepository = userRepository;
+        this.matchRepository = matchRepository;
+        this.matchService = matchService;
+    }
 
     public ExecutionResult runSample(CodeExecutionRequest request) {
         Problem problem = problemRepository.findById(request.getProblemId())
