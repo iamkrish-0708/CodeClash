@@ -52,6 +52,7 @@
       <span>CodeClash</span>
     </a>
     <nav class="nav-links" id="navLinks">
+      <a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a>
       <span id="userBadge" style="color: var(--accent-cyan); font-weight: 600;">Loading...</span>
       <button onclick="handleLogout()" class="btn btn-outline" style="padding: 0.4rem 0.8rem;">Logout</button>
     </nav>
@@ -97,7 +98,7 @@
         <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.25rem;">
           Generate a room code and invite your opponent on the local network.
         </p>
-        <button class="btn btn-primary" style="width: 100%;" onclick="alert('Room creation logic will be unlocked in Phase 3!')">
+        <button class="btn btn-primary" style="width: 100%;" id="createRoomBtn" onclick="handleCreateRoom()">
           Create Room Lobby
         </button>
       </div>
@@ -109,7 +110,7 @@
         </p>
         <div style="display: flex; gap: 0.5rem;">
           <input type="text" class="form-input" id="joinRoomCode" placeholder="e.g. CLASH-4821" style="text-transform: uppercase;">
-          <button class="btn btn-outline" onclick="alert('Room joining logic will be unlocked in Phase 3!')">
+          <button class="btn btn-outline" id="joinRoomBtn" onclick="handleJoinRoom()">
             Join
           </button>
         </div>
@@ -131,6 +132,41 @@
         document.getElementById('statWinRate').innerText = `${user.winRate}%`;
       } catch (err) {
         window.location.href = 'login.html';
+      }
+    }
+
+    async function handleCreateRoom() {
+      const btn = document.getElementById('createRoomBtn');
+      btn.disabled = true;
+      btn.innerText = 'Creating Lobby...';
+      try {
+        const room = await API.createRoom();
+        window.location.href = `lobby.html?code=${room.roomCode}`;
+      } catch (err) {
+        alert(err.message || 'Failed to create room');
+        btn.disabled = false;
+        btn.innerText = 'Create Room Lobby';
+      }
+    }
+
+    async function handleJoinRoom() {
+      const input = document.getElementById('joinRoomCode');
+      const code = input.value.trim().toUpperCase();
+      if (!code) {
+        alert('Please enter a room code');
+        return;
+      }
+
+      const btn = document.getElementById('joinRoomBtn');
+      btn.disabled = true;
+      btn.innerText = 'Joining...';
+      try {
+        const room = await API.joinRoom(code);
+        window.location.href = `lobby.html?code=${room.roomCode}`;
+      } catch (err) {
+        alert(err.message || 'Failed to join room');
+        btn.disabled = false;
+        btn.innerText = 'Join';
       }
     }
 

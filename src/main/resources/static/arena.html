@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Arena — CodeClash</title>
+  <title>Arena Duel — CodeClash</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,12 +35,20 @@
       border-radius: var(--radius-md);
       color: var(--accent-cyan);
     }
+    .timer-critical {
+      color: var(--accent-red) !important;
+      border-color: var(--accent-red) !important;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
     .arena-layout {
       display: flex;
       flex: 1;
       height: calc(100vh - 56px);
     }
-    /* Left Panel */
     .panel-left {
       width: 45%;
       border-right: 1px solid var(--border-color);
@@ -71,7 +79,6 @@
       margin: 0.75rem 0;
       white-space: pre-wrap;
     }
-    /* Right Panel */
     .panel-right {
       width: 55%;
       display: flex;
@@ -108,8 +115,8 @@
     }
     .action-bar {
       display: flex;
-      justify-content: flex-end;
-      gap: 0.75rem;
+      justify-content: space-between;
+      align-items: center;
       padding: 0.6rem 1rem;
       background: var(--bg-card);
       border-top: 1px solid var(--border-color);
@@ -123,6 +130,35 @@
     }
     .tc-pass { border-left: 4px solid var(--accent-green); }
     .tc-fail { border-left: 4px solid var(--accent-red); }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      max-width: 460px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+    .modal-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+    .rating-delta {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin: 1rem 0;
+    }
   </style>
 </head>
 <body>
@@ -136,7 +172,15 @@
       <span class="badge badge-easy" id="problemDifficultyBadge">EASY</span>
     </div>
 
-    <div class="timer-badge" id="matchTimer">⏱️ 15:00</div>
+    <!-- Match Timer & Opponent Status -->
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <div id="opponentBadge" style="background: rgba(30, 41, 59, 0.8); border: 1px solid var(--border-color); padding: 0.35rem 0.8rem; border-radius: var(--radius-md); font-size: 0.85rem; display: none;">
+        <span style="color: var(--text-muted);">Opponent:</span>
+        <span id="opponentStatusText" style="color: var(--accent-cyan); font-weight: 600; margin-left: 0.3rem;">Thinking...</span>
+      </div>
+
+      <div class="timer-badge" id="matchTimer">⏱️ --:--</div>
+    </div>
 
     <div style="display: flex; align-items: center; gap: 0.75rem;">
       <span id="userStatus" style="font-size: 0.85rem; color: var(--text-secondary);">Player: ...</span>
@@ -163,7 +207,6 @@
     <!-- Right Editor Panel -->
     <div class="panel-right">
       <div id="monacoEditor" class="editor-container"></div>
-      <!-- Fallback textarea for offline if CDN is unavailable -->
       <textarea id="fallbackEditor" style="display:none; width:100%; height:100%; background:#1e1e1e; color:#f8fafc; font-family:monospace; padding:1rem; border:none; resize:none;"></textarea>
 
       <!-- Bottom Console Output -->
@@ -179,12 +222,35 @@
 
       <!-- Action Bar -->
       <div class="action-bar">
-        <button class="btn btn-outline" id="runSampleBtn" onclick="handleRunSample()">
-          ▶ Run Sample Cases
-        </button>
-        <button class="btn btn-primary" id="submitBtn" onclick="handleSubmit()">
-          🚀 Submit Solution
-        </button>
+        <div>
+          <button class="btn btn-outline" id="surrenderBtn" style="color: var(--accent-red); border-color: rgba(239,68,68,0.3); display: none;" onclick="handleSurrender()">
+            🏳️ Forfeit Match
+          </button>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="btn btn-outline" id="runSampleBtn" onclick="handleRunSample()">
+            ▶ Run Sample Cases
+          </button>
+          <button class="btn btn-primary" id="submitBtn" onclick="handleSubmit()">
+            🚀 Submit Solution
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Victory / Defeat Modal -->
+  <div class="modal-backdrop" id="resultModal">
+    <div class="modal-box">
+      <div class="modal-icon" id="modalIcon">🏆</div>
+      <h2 id="modalTitle" style="font-size: 1.8rem; font-weight: 900; margin-bottom: 0.5rem;">VICTORY!</h2>
+      <p id="modalSubtitle" style="color: var(--text-secondary); font-size: 0.95rem;">You solved all test cases faster than your opponent.</p>
+      
+      <div class="rating-delta" id="modalEloChange">+16 Elo (New: 1216)</div>
+      
+      <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; justify-content: center;">
+        <a href="dashboard.html" class="btn btn-primary" style="padding: 0.7rem 1.8rem;">Return to Dashboard</a>
+        <a href="leaderboard.html" class="btn btn-outline">Leaderboard</a>
       </div>
     </div>
   </div>
@@ -194,33 +260,125 @@
     let editorInstance = null;
     let currentProblemId = null;
     let currentMatchId = null;
+    let currentUser = null;
+    let matchPollTimer = null;
+    let matchEnded = false;
+    let countdownInterval = null;
+    let remainingSec = 0;
 
-    // Parse URL params (e.g. ?problemId=1 or ?matchId=5)
     const urlParams = new URLSearchParams(window.location.search);
-    currentProblemId = urlParams.get('problemId') || 1;
+    currentProblemId = urlParams.get('problemId') || null;
     currentMatchId = urlParams.get('matchId') || null;
 
-    // Check Auth
-    async function initUser() {
+    async function init() {
       try {
-        const user = await API.getCurrentUser();
-        document.getElementById('userStatus').innerText = `👤 ${user.username} (${user.rating} Elo)`;
+        currentUser = await API.getCurrentUser();
+        document.getElementById('userStatus').innerText = `👤 ${currentUser.username} (${currentUser.rating} Elo)`;
       } catch (e) {
-        document.getElementById('userStatus').innerText = `Guest (Practice Mode)`;
+        document.getElementById('userStatus').innerText = `Guest Mode`;
+      }
+
+      if (currentMatchId) {
+        document.getElementById('opponentBadge').style.display = 'block';
+        document.getElementById('surrenderBtn').style.display = 'inline-flex';
+        await pollMatch();
+        matchPollTimer = setInterval(pollMatch, 1500); // 1.5s match polling
+      } else if (currentProblemId) {
+        loadProblem(currentProblemId);
       }
     }
 
-    // Load Problem
-    async function loadProblem() {
+    async function pollMatch() {
+      if (matchEnded) return;
       try {
-        const problem = await API.getProblem(currentProblemId);
+        const match = await API.getMatchStatus(currentMatchId);
+        if (!currentProblemId) {
+          currentProblemId = match.problemId;
+          loadProblem(match.problemId);
+        }
+
+        // Sync Timer
+        remainingSec = match.remainingSeconds;
+        updateTimerDisplay();
+
+        // Sync Opponent Status
+        if (currentUser && match.players) {
+          const opponent = match.players.find(p => p.userId !== currentUser.id);
+          if (opponent) {
+            const oppStatusEl = document.getElementById('opponentStatusText');
+            if (opponent.result === 'WIN') oppStatusEl.innerText = 'Submitted 100% (Winner)';
+            else if (opponent.hasSubmitted) oppStatusEl.innerText = `Submitted (${opponent.passedTestCases}/${opponent.totalTestCases} Tests)`;
+            else oppStatusEl.innerText = 'Writing Code...';
+          }
+        }
+
+        // Check if Finished
+        if (match.status === 'FINISHED' || match.status === 'DRAW' || match.status === 'CANCELLED') {
+          matchEnded = true;
+          clearInterval(matchPollTimer);
+          showMatchResults(match);
+        }
+      } catch (err) {
+        console.error('Match poll error:', err);
+      }
+    }
+
+    function updateTimerDisplay() {
+      const timerEl = document.getElementById('matchTimer');
+      const mins = Math.floor(remainingSec / 60);
+      const secs = remainingSec % 60;
+      timerEl.innerText = `⏱️ ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      if (remainingSec <= 60 && remainingSec > 0) {
+        timerEl.classList.add('timer-critical');
+      }
+    }
+
+    function showMatchResults(match) {
+      const modal = document.getElementById('resultModal');
+      const icon = document.getElementById('modalIcon');
+      const title = document.getElementById('modalTitle');
+      const subtitle = document.getElementById('modalSubtitle');
+      const eloChange = document.getElementById('modalEloChange');
+
+      const mySummary = match.players ? match.players.find(p => p.userId === (currentUser ? currentUser.id : null)) : null;
+
+      if (match.status === 'DRAW') {
+        icon.innerText = '🤝';
+        title.innerText = 'DRAW!';
+        title.style.color = 'var(--accent-orange)';
+        subtitle.innerText = 'Equal test cases passed within the time limit.';
+      } else if (mySummary && mySummary.result === 'WIN') {
+        icon.innerText = '🏆';
+        title.innerText = 'VICTORY!';
+        title.style.color = 'var(--accent-green)';
+        subtitle.innerText = 'You won the 1v1 duel!';
+      } else {
+        icon.innerText = '💀';
+        title.innerText = 'DEFEAT';
+        title.style.color = 'var(--accent-red)';
+        subtitle.innerText = `${match.winnerUsername || 'Opponent'} took the win.`;
+      }
+
+      if (mySummary && mySummary.ratingChange !== null) {
+        const sign = mySummary.ratingChange >= 0 ? '+' : '';
+        eloChange.innerText = `${sign}${mySummary.ratingChange} Elo (New: ${mySummary.ratingAfter})`;
+        eloChange.style.color = mySummary.ratingChange >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';
+      } else {
+        eloChange.innerText = '';
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    async function loadProblem(id) {
+      try {
+        const problem = await API.getProblem(id);
         document.getElementById('problemTitle').innerText = problem.title;
         document.getElementById('problemDifficultyBadge').innerText = problem.difficulty;
         document.getElementById('problemDifficultyBadge').className = `badge badge-${problem.difficulty.toLowerCase()}`;
         document.getElementById('timeLimit').innerText = Math.floor(problem.timeLimitSeconds / 60);
         document.getElementById('memoryLimit').innerText = problem.memoryLimitMb;
         
-        // Simple markdown to HTML format
         const formattedDesc = problem.description
           .replace(/### (.*)/g, '<h3 style="font-size:1.1rem; margin:1rem 0 0.4rem; color:var(--text-primary); font-weight:700;">$1</h3>')
           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -229,16 +387,14 @@
           .replace(/\n/g, '<br>');
 
         document.getElementById('problemDescription').innerHTML = formattedDesc;
-
-        // Initialize Editor with Starter Code
-        initMonaco(problem.starterCodeJava || '// Write your Java solution here\nimport java.util.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        \n    }\n}');
+        initMonaco(problem.starterCodeJava || '// Java Solution\npublic class Solution {\n    public static void main(String[] args) {\n    }\n}');
       } catch (err) {
         document.getElementById('problemDescription').innerHTML = `<p style="color:var(--accent-red)">Error loading problem: ${err.message}</p>`;
       }
     }
 
-    // Initialize Monaco Editor
     function initMonaco(starterCode) {
+      if (editorInstance) return;
       if (window.require) {
         require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
         require(['vs/editor/editor.main'], function () {
@@ -251,13 +407,10 @@
             fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
             minimap: { enabled: false },
             lineNumbers: 'on',
-            roundedSelection: false,
             scrollBeyondLastLine: false,
-            readOnly: false,
           });
         });
       } else {
-        // Fallback
         const fallback = document.getElementById('fallbackEditor');
         fallback.style.display = 'block';
         fallback.value = starterCode;
@@ -265,13 +418,10 @@
     }
 
     function getEditorCode() {
-      if (editorInstance) {
-        return editorInstance.getValue();
-      }
+      if (editorInstance) return editorInstance.getValue();
       return document.getElementById('fallbackEditor').value;
     }
 
-    // Run Sample Test Cases
     async function handleRunSample() {
       const btn = document.getElementById('runSampleBtn');
       const consoleOutput = document.getElementById('consoleOutput');
@@ -279,12 +429,11 @@
       
       btn.disabled = true;
       btn.innerText = '⏳ Running...';
-      consoleOutput.innerHTML = '<span style="color:var(--accent-cyan)">Compiling and executing against sample test cases...</span>';
+      consoleOutput.innerHTML = '<span style="color:var(--accent-cyan)">Compiling and running against sample test cases...</span>';
 
       try {
         const code = getEditorCode();
         const res = await API.runSample(currentProblemId, code, currentMatchId);
-        
         timeBadge.innerText = `${res.executionTimeMs || 0} ms`;
         renderConsoleResults(res, false);
       } catch (err) {
@@ -295,7 +444,6 @@
       }
     }
 
-    // Submit Solution
     async function handleSubmit() {
       const btn = document.getElementById('submitBtn');
       const consoleOutput = document.getElementById('consoleOutput');
@@ -303,14 +451,18 @@
 
       btn.disabled = true;
       btn.innerText = '🚀 Submitting...';
-      consoleOutput.innerHTML = '<span style="color:var(--accent-cyan)">Grading all test cases (including hidden tests)...</span>';
+      consoleOutput.innerHTML = '<span style="color:var(--accent-cyan)">Grading all test cases...</span>';
 
       try {
         const code = getEditorCode();
         const res = await API.submitCode(currentProblemId, code, currentMatchId);
-
         timeBadge.innerText = `${res.executionTimeMs || 0} ms`;
         renderConsoleResults(res, true);
+
+        // Immediate match poll refresh
+        if (currentMatchId) {
+          pollMatch();
+        }
       } catch (err) {
         consoleOutput.innerHTML = `<span style="color:var(--accent-red)">Submission Failed: ${err.message}</span>`;
       } finally {
@@ -319,7 +471,13 @@
       }
     }
 
-    // Render Results in Console
+    async function handleSurrender() {
+      if (confirm('Are you sure you want to forfeit this 1v1 match? This will count as a loss.')) {
+        await API.surrenderMatch(currentMatchId);
+        pollMatch();
+      }
+    }
+
     function renderConsoleResults(res, isFinal) {
       const consoleOutput = document.getElementById('consoleOutput');
       const statusText = document.getElementById('consoleStatusText');
@@ -343,7 +501,7 @@
         html = res.testCaseResults.map(tc => `
           <div class="tc-result-item ${tc.passed ? 'tc-pass' : 'tc-fail'}">
             <div style="display:flex; justify-content:space-between; font-weight:700; font-size:0.85rem; margin-bottom:0.25rem;">
-              <span>Test Case #${tc.testCaseIndex} ${tc.isHidden ? '(Hidden)' : ''}</span>
+              <span>Test Case #${tc.testCaseIndex} ${tc.isHidden ? '(Hidden Grading Test)' : ''}</span>
               <span style="color:${tc.passed ? 'var(--accent-green)' : 'var(--accent-red)'}">
                 ${tc.passed ? '✓ PASSED' : '✗ FAILED'}
               </span>
@@ -363,7 +521,7 @@
       if (isFinal && res.status === 'ACCEPTED') {
         html = `
           <div style="background:rgba(16,185,129,0.15); border:1px solid var(--accent-green); padding:0.75rem; border-radius:6px; margin-bottom:0.75rem; color:#86efac; font-weight:700;">
-            🎉 All Test Cases Passed! Solution Accepted.
+            🎉 All Test Cases Passed!
           </div>
         ` + html;
       }
@@ -371,8 +529,7 @@
       consoleOutput.innerHTML = html;
     }
 
-    initUser();
-    loadProblem();
+    init();
   </script>
 </body>
 </html>

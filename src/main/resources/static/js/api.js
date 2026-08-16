@@ -76,5 +76,50 @@ const API = {
       method: 'POST',
       body: JSON.stringify({ problemId, code, matchId, language: 'JAVA' }),
     });
+  },
+
+  // Room Lobby Management
+  async createRoom() {
+    return this.request('/api/rooms', { method: 'POST' });
+  },
+
+  async joinRoom(roomCode) {
+    return this.request('/api/rooms/join', {
+      method: 'POST',
+      body: JSON.stringify({ roomCode }),
+    });
+  },
+
+  async getRoom(roomCode) {
+    return this.request(`/api/rooms/${roomCode}`);
+  },
+
+  async leaveRoom(roomCode) {
+    return this.request(`/api/rooms/${roomCode}/leave`, { method: 'POST' });
+  },
+
+  // Live Matches
+  async startMatch(roomId, problemId = null) {
+    return this.request('/api/matches/start', {
+      method: 'POST',
+      body: JSON.stringify({ roomId, problemId }),
+    });
+  },
+
+  async getMatchStatus(matchId) {
+    return this.request(`/api/matches/${matchId}/status`);
+  },
+
+  async surrenderMatch(matchId) {
+    return this.request(`/api/matches/${matchId}/surrender`, { method: 'POST' });
+  },
+
+  // Leaderboard
+  async getLeaderboard() {
+    return this.request('/api/leaderboard');
+  },
+
+  async getTop10() {
+    return this.request('/api/leaderboard/top');
   }
 };

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard — CodeClash</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+  <style>
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .leaderboard-table th, .leaderboard-table td {
+      padding: 1rem 1.25rem;
+      text-align: left;
+    }
+    .leaderboard-table th {
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .leaderboard-table tr:not(:last-child) td {
+      border-bottom: 1px solid var(--border-color);
+    }
+    .leaderboard-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .rank-badge {
+      font-family: var(--font-mono);
+      font-weight: 800;
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--bg-input);
+    }
+    .rank-1 { background: rgba(245, 158, 11, 0.2); color: var(--accent-orange); border: 1px solid var(--accent-orange); }
+    .rank-2 { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid #94a3b8; }
+    .rank-3 { background: rgba(180, 83, 9, 0.2); color: #d97706; border: 1px solid #b45309; }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a href="index.html" class="nav-brand">
+      <span class="brand-icon">⚔️</span>
+      <span>CodeClash</span>
+    </a>
+    <nav class="nav-links">
+      <a href="dashboard.html" class="btn btn-outline">Dashboard</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h1 style="font-size: 2.2rem; font-weight: 900;">🏆 Local Network Leaderboard</h1>
+      <p style="color: var(--text-secondary); font-size: 0.95rem;">Live Chess-style Elo rankings for all registered duelists</p>
+    </div>
+
+    <table class="leaderboard-table">
+      <thead>
+        <tr>
+          <th style="width: 80px;">Rank</th>
+          <th>Duelist</th>
+          <th>Rating</th>
+          <th>Matches</th>
+          <th>W / L / D</th>
+          <th>Win Rate</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboardBody">
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+            Loading rankings...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script>
+    async function loadLeaderboard() {
+      const tbody = document.getElementById('leaderboardBody');
+      try {
+        const page = await API.getLeaderboard();
+        const users = page.content || [];
+
+        if (users.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-muted);">No players registered yet!</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = users.map((u, idx) => {
+          const rank = idx + 1;
+          let rankClass = '';
+          if (rank === 1) rankClass = 'rank-1';
+          else if (rank === 2) rankClass = 'rank-2';
+          else if (rank === 3) rankClass = 'rank-3';
+
+          const winRate = u.matchesPlayed > 0 ? Math.round((u.wins / u.matchesPlayed) * 100) : 0;
+
+          return `
+            <tr>
+              <td><span class="rank-badge ${rankClass}">#${rank}</span></td>
+              <td style="font-weight: 700; color: var(--text-primary);">
+                ${rank === 1 ? '👑 ' : ''}${u.username}
+              </td>
+              <td>
+                <span style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan); font-size: 1.05rem;">
+                  ${u.rating}
+                </span>
+              </td>
+              <td style="color: var(--text-secondary);">${u.matchesPlayed}</td>
+              <td style="color: var(--text-secondary); font-family: var(--font-mono);">
+                <span style="color: var(--accent-green);">${u.wins}W</span> / 
+                <span style="color: var(--accent-red);">${u.losses}L</span> / 
+                <span style="color: var(--accent-orange);">${u.draws}D</span>
+              </td>
+              <td style="font-weight: 600; color: var(--accent-orange);">${winRate}%</td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--accent-red);">Failed to load rankings: ${err.message}</td></tr>`;
+      }
+    }
+
+    loadLeaderboard();
+  </script>
+</body>
+</html>

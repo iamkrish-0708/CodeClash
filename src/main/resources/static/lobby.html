@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battle Lobby — CodeClash</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+  <style>
+    .lobby-wrapper {
+      max-width: 720px;
+      margin: 2rem auto;
+      text-align: center;
+    }
+    .room-code-box {
+      background: var(--bg-card);
+      border: 2px dashed var(--accent-cyan);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin: 1.5rem 0 2.5rem;
+      display: inline-block;
+      min-width: 320px;
+    }
+    .room-code-text {
+      font-family: var(--font-mono);
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--accent-cyan);
+      margin-bottom: 0.5rem;
+    }
+    .versus-container {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1.5rem;
+      align-items: center;
+      margin-bottom: 2.5rem;
+    }
+    .player-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem 1.5rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    }
+    .vs-circle {
+      width: 50px;
+      height: 50px;
+      background: var(--bg-secondary);
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: var(--accent-orange);
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a href="dashboard.html" class="nav-brand">
+      <span class="brand-icon">⚔️</span>
+      <span>CodeClash</span>
+    </a>
+    <nav class="nav-links">
+      <button onclick="handleLeave()" class="btn btn-outline">Leave Lobby</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="lobby-wrapper">
+      <h1 style="font-size: 2rem; font-weight: 800;">1v1 Matchmaking Lobby</h1>
+      <p style="color: var(--text-secondary); font-size: 0.95rem;">Share this room code with your opponent on the local Wi-Fi</p>
+
+      <div class="room-code-box">
+        <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px;">Room Code</div>
+        <div class="room-code-text" id="roomCodeDisplay">CLASH-....</div>
+        <button class="btn btn-outline" onclick="copyRoomCode()" id="copyBtn" style="padding: 0.35rem 0.8rem; font-size: 0.8rem;">
+          📋 Copy Code
+        </button>
+      </div>
+
+      <!-- Versus Cards -->
+      <div class="versus-container">
+        <!-- Host Card -->
+        <div class="player-card">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">👑</div>
+          <h3 id="hostName" style="font-size: 1.25rem; font-weight: 700;">Host</h3>
+          <span class="badge badge-easy" style="margin-top: 0.5rem;" id="hostRating">1200 Elo</span>
+        </div>
+
+        <div class="vs-circle">VS</div>
+
+        <!-- Guest Card -->
+        <div class="player-card" id="guestCard">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;" id="guestIcon">⏳</div>
+          <h3 id="guestName" style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted);">Waiting for Player 2...</h3>
+          <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--text-muted); margin-top: 0.5rem;" id="guestRating">---- Elo</span>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div id="controlsArea">
+        <button class="btn btn-primary" id="startMatchBtn" disabled style="padding: 0.85rem 2.5rem; font-size: 1.1rem; opacity: 0.5;" onclick="handleStartMatch()">
+          ⚔️ Start 1v1 Duel
+        </button>
+        <p id="statusMsg" style="margin-top: 0.75rem; color: var(--text-muted); font-size: 0.85rem;">Waiting for an opponent to join before you can start...</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomCode = urlParams.get('code');
+    let currentUser = null;
+    let pollInterval = null;
+    let isHost = false;
+    let roomId = null;
+
+    if (!roomCode) {
+      window.location.href = 'dashboard.html';
+    }
+
+    document.getElementById('roomCodeDisplay').innerText = roomCode;
+
+    async function init() {
+      try {
+        currentUser = await API.getCurrentUser();
+        await pollRoom();
+        pollInterval = setInterval(pollRoom, 1500); // 1.5s short polling
+      } catch (err) {
+        window.location.href = 'login.html';
+      }
+    }
+
+    async function pollRoom() {
+      try {
+        const room = await API.getRoom(roomCode);
+        roomId = room.id;
+        isHost = room.hostUserId === currentUser.id;
+
+        // Update Host
+        document.getElementById('hostName').innerText = room.hostUsername;
+        document.getElementById('hostRating').innerText = `${room.hostRating} Elo`;
+
+        // Update Guest
+        if (room.guestUserId) {
+          document.getElementById('guestIcon').innerText = '🤺';
+          document.getElementById('guestName').innerText = room.guestUsername;
+          document.getElementById('guestName').style.color = 'var(--text-primary)';
+          document.getElementById('guestRating').innerText = `${room.guestRating} Elo`;
+          document.getElementById('guestRating').className = 'badge badge-medium';
+
+          if (isHost) {
+            const startBtn = document.getElementById('startMatchBtn');
+            startBtn.disabled = false;
+            startBtn.style.opacity = '1';
+            document.getElementById('statusMsg').innerText = 'Opponent is ready! Click Start to begin.';
+            document.getElementById('statusMsg').style.color = 'var(--accent-green)';
+          } else {
+            document.getElementById('controlsArea').innerHTML = `
+              <div style="color: var(--accent-cyan); font-weight: 700; font-size: 1.1rem;">
+                🎮 In Lobby! Waiting for host ${room.hostUsername} to launch the match...
+              </div>
+            `;
+          }
+        }
+
+        // Check if Match Started
+        if (room.status === 'IN_PROGRESS' && room.activeMatchId) {
+          clearInterval(pollInterval);
+          window.location.href = `arena.html?matchId=${room.activeMatchId}`;
+        }
+      } catch (err) {
+        console.error('Poll error:', err);
+      }
+    }
+
+    async function handleStartMatch() {
+      const btn = document.getElementById('startMatchBtn');
+      btn.disabled = true;
+      btn.innerText = '🚀 Launching Duel...';
+      try {
+        const match = await API.startMatch(roomId);
+        clearInterval(pollInterval);
+        window.location.href = `arena.html?matchId=${match.matchId}&problemId=${match.problemId}`;
+      } catch (err) {
+        alert(err.message || 'Failed to start match');
+        btn.disabled = false;
+        btn.innerText = '⚔️ Start 1v1 Duel';
+      }
+    }
+
+    async function handleLeave() {
+      clearInterval(pollInterval);
+      await API.leaveRoom(roomCode);
+      window.location.href = 'dashboard.html';
+    }
+
+    function copyRoomCode() {
+      navigator.clipboard.writeText(roomCode);
+      const btn = document.getElementById('copyBtn');
+      btn.innerText = '✓ Copied!';
+      setTimeout(() => { btn.innerText = '📋 Copy Code'; }, 1500);
+    }
+
+    init();
+  </script>
+</body>
+</html>

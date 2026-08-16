@@ -23,6 +23,7 @@ public class SubmissionService {
     private final SubmissionRepository submissionRepository;
     private final UserRepository userRepository;
     private final MatchRepository matchRepository;
+    private final MatchService matchService;
 
     public ExecutionResult runSample(CodeExecutionRequest request) {
         Problem problem = problemRepository.findById(request.getProblemId())
@@ -65,6 +66,17 @@ public class SubmissionService {
                 .build();
 
         submissionRepository.save(submission);
+
+        if (request.getMatchId() != null) {
+            matchService.recordSubmission(
+                    request.getMatchId(),
+                    userId,
+                    result.getPassedTestCases(),
+                    result.getTotalTestCases(),
+                    result.isSuccess()
+            );
+        }
+
         return result;
     }
 
