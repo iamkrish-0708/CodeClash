@@ -57,5 +57,24 @@ const API = {
 
   async getProblem(id) {
     return this.request(`/api/problems/${id}`);
+  },
+
+  async getSampleTestCases(id) {
+    return this.request(`/api/problems/${id}/sample-test-cases`);
+  },
+
+  // Code Submissions & Execution
+  async runSample(problemId, code, matchId = null) {
+    return this.request('/api/submissions/run-sample', {
+      method: 'POST',
+      body: JSON.stringify({ problemId, code, matchId, language: 'JAVA' }),
+    });
+  },
+
+  async submitCode(problemId, code, matchId = null) {
+    return this.request('/api/submissions/submit', {
+      method: 'POST',
+      body: JSON.stringify({ problemId, code, matchId, language: 'JAVA' }),
+    });
   }
 };

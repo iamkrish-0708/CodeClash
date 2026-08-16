@@ -100,7 +100,7 @@
             <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.25rem;">
               Time Limit: ${Math.floor(p.timeLimitSeconds / 60)} min • Memory: ${p.memoryLimitMb} MB
             </p>
-            <a href="login.html" class="btn btn-outline" style="width: 100%;">Battle on this Problem</a>
+            <a href="arena.html?problemId=${p.id}" class="btn btn-primary" style="width: 100%;">Solve Challenge</a>
           </div>
         `).join('');
       } catch (err) {
