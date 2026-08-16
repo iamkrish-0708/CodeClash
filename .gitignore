@@ -4,6 +4,9 @@
 # Log file
 *.log
 
+# Portable Tools
+tools/
+
 # BlueJ files
 *.ctxt
 
