@@ -14,7 +14,7 @@
     <artifactId>codeclash</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>CodeClash</name>
-    <description>LAN 1v1 Competitive Coding Battle Arena</description>
+    <description>1v1 Competitive Coding Battle Arena</description>
 
     <properties>
         <java.version>21</java.version>
@@ -39,6 +39,13 @@
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- H2 Database for Zero-Config Cloud Deployments -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
 
