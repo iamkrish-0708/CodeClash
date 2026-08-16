@@ -24,6 +24,6 @@ echo Starting Spring Boot Backend on http://localhost:8080 ...
 echo (The first run will download project dependencies, please wait a moment)
 echo.
 
-call mvn spring-boot:run
+call mvn spring-boot:run -Dspring-boot.run.profiles=local
 
 pause
