@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeClash — 1v1 LAN Competitive Coding</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation -->
+  <header class="navbar">
+    <a href="index.html" class="nav-brand">
+      <span class="brand-icon">⚔️</span>
+      <span>CodeClash</span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="login.html" class="btn btn-outline" id="loginBtn">Login</a>
+      <a href="register.html" class="btn btn-primary" id="registerBtn">Register</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-badge">⚡ LAN Real-Time 1v1 Battles</div>
+      <h1 class="hero-title">Face Off in Live Head-to-Head Coding Duels</h1>
+      <p class="hero-subtitle">
+        Create private room lobbies, solve algorithmic challenges in real time, compile and evaluate Java code instantly, and climb the local Elo ladder.
+      </p>
+      <div class="hero-actions">
+        <a href="register.html" class="btn btn-primary" style="padding: 0.8rem 1.8rem; font-size: 1.05rem;">Get Started</a>
+        <a href="#problems" class="btn btn-outline" style="padding: 0.8rem 1.8rem; font-size: 1.05rem;">Explore Problems</a>
+      </div>
+    </section>
+
+    <!-- Problem Showcase -->
+    <section id="problems" style="margin-top: 2rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem;">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800;">⚔️ Battle Challenge Library</h2>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">Pre-loaded algorithmic problems ready for match duels</p>
+        </div>
+      </div>
+
+      <div class="grid-2" id="problemsList">
+        <div style="text-align: center; grid-column: 1 / -1; padding: 2rem; color: var(--text-muted);">
+          Loading challenge pool...
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>CodeClash — LAN 1v1 Competitive Coding Engine • Spring Boot + MySQL</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    // Check if user is logged in
+    async function checkAuth() {
+      try {
+        const user = await API.getCurrentUser();
+        if (user && user.username) {
+          const navLinks = document.getElementById('navLinks');
+          navLinks.innerHTML = `
+            <span style="color: var(--accent-cyan); font-weight: 600; font-size: 0.95rem;">👤 ${user.username} (${user.rating} Elo)</span>
+            <a href="dashboard.html" class="btn btn-primary">Dashboard</a>
+            <button onclick="handleLogout()" class="btn btn-outline">Logout</button>
+          `;
+        }
+      } catch (e) {
+        // Not logged in, defaults remain
+      }
+    }
+
+    async function handleLogout() {
+      await API.logout();
+      window.location.reload();
+    }
+
+    // Load Problems
+    async function loadProblems() {
+      const container = document.getElementById('problemsList');
+      try {
+        const problems = await API.getProblems();
+        if (!problems || problems.length === 0) {
+          container.innerHTML = `<div style="text-align:center; grid-column:1/-1; color: var(--text-muted);">No problems found. Start the server to seed initial challenges!</div>`;
+          return;
+        }
+
+        container.innerHTML = problems.map(p => `
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <h3 style="font-size: 1.15rem; font-weight: 700;">${p.title}</h3>
+              <span class="badge badge-${p.difficulty.toLowerCase()}">${p.difficulty}</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.25rem;">
+              Time Limit: ${Math.floor(p.timeLimitSeconds / 60)} min • Memory: ${p.memoryLimitMb} MB
+            </p>
+            <a href="login.html" class="btn btn-outline" style="width: 100%;">Battle on this Problem</a>
+          </div>
+        `).join('');
+      } catch (err) {
+        container.innerHTML = `<div style="text-align:center; grid-column:1/-1; color: var(--accent-red);">Failed to connect to backend server. Make sure Spring Boot is running!</div>`;
+      }
+    }
+
+    checkAuth();
+    loadProblems();
+  </script>
+</body>
+</html>

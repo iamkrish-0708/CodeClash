@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — CodeClash</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="navbar">
+    <a href="index.html" class="nav-brand">
+      <span class="brand-icon">⚔️</span>
+      <span>CodeClash</span>
+    </a>
+    <nav class="nav-links">
+      <a href="register.html" class="btn btn-outline">Register</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="auth-wrapper">
+      <div class="auth-header">
+        <h2>Welcome Back</h2>
+        <p>Login to enter coding rooms and battle</p>
+      </div>
+
+      <div id="alertBox" class="alert"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="usernameOrEmail">Username or Email</label>
+          <input type="text" id="usernameOrEmail" class="form-input" placeholder="e.g. coder123" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submitBtn" style="width: 100%; margin-top: 0.5rem;">
+          Enter Arena
+        </button>
+      </form>
+
+      <p style="text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+        Don't have an account? <a href="register.html" style="color: var(--accent-cyan); text-decoration: none; font-weight: 600;">Create one</a>
+      </p>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script>
+    const form = document.getElementById('loginForm');
+    const alertBox = document.getElementById('alertBox');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Authenticating...';
+
+      const usernameOrEmail = document.getElementById('usernameOrEmail').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await API.login(usernameOrEmail, password);
+        if (response.success) {
+          alertBox.className = 'alert alert-success';
+          alertBox.innerText = 'Login successful! Redirecting...';
+          alertBox.style.display = 'block';
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 800);
+        } else {
+          alertBox.className = 'alert alert-error';
+          alertBox.innerText = response.message || 'Login failed';
+          alertBox.style.display = 'block';
+        }
+      } catch (err) {
+        alertBox.className = 'alert alert-error';
+        alertBox.innerText = err.message || 'Unable to connect to server';
+        alertBox.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Enter Arena';
+      }
+    });
+  </script>
+</body>
+</html>

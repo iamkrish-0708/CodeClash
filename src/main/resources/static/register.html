@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — CodeClash</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="navbar">
+    <a href="index.html" class="nav-brand">
+      <span class="brand-icon">⚔️</span>
+      <span>CodeClash</span>
+    </a>
+    <nav class="nav-links">
+      <a href="login.html" class="btn btn-outline">Login</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="auth-wrapper">
+      <div class="auth-header">
+        <h2>Create Account</h2>
+        <p>Join the LAN 1v1 battle ladder</p>
+      </div>
+
+      <div id="alertBox" class="alert"></div>
+
+      <form id="registerForm">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input type="text" id="username" class="form-input" placeholder="e.g. byte_master" required minlength="3" autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" class="form-input" placeholder="coder@example.com" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="At least 6 characters" required minlength="6" autocomplete="new-password">
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submitBtn" style="width: 100%; margin-top: 0.5rem;">
+          Create Player Profile
+        </button>
+      </form>
+
+      <p style="text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+        Already have an account? <a href="login.html" style="color: var(--accent-cyan); text-decoration: none; font-weight: 600;">Login here</a>
+      </p>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script>
+    const form = document.getElementById('registerForm');
+    const alertBox = document.getElementById('alertBox');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Creating account...';
+
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await API.register(username, email, password);
+        if (response.success) {
+          alertBox.className = 'alert alert-success';
+          alertBox.innerText = 'Account created successfully! Redirecting to arena...';
+          alertBox.style.display = 'block';
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 900);
+        } else {
+          alertBox.className = 'alert alert-error';
+          alertBox.innerText = response.message || 'Registration failed';
+          alertBox.style.display = 'block';
+        }
+      } catch (err) {
+        alertBox.className = 'alert alert-error';
+        alertBox.innerText = err.message || 'Unable to connect to server';
+        alertBox.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Create Player Profile';
+      }
+    });
+  </script>
+</body>
+</html>
