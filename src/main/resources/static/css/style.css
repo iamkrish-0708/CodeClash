@@ -112,7 +112,7 @@ h1, h2, h3, h4, h5, h6 {
 .quote-ticker-track {
   display: inline-flex;
   white-space: nowrap;
-  animation: quote-marquee 50s linear infinite;
+  animation: quote-marquee 115s linear infinite; /* Smooth, relaxed reading pace */
   will-change: transform;
 }
 
@@ -128,7 +128,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 0.82rem;
   letter-spacing: 0.4px;
   color: #cbd5e1;
-  padding: 0 1.75rem;
+  padding: 0 2rem;
 }
 
 .quote-prefix-cyan { color: var(--accent-cyan); font-weight: 700; }
@@ -142,12 +142,14 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: translateX(-50%); }
 }
 
-/* Navbar */
+/* ==========================================================================
+   Navbar & Retro Pacman Horizontal Track
+   ========================================================================== */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.1rem 2.5rem;
+  padding: 0.85rem 2rem;
   background-color: var(--bg-glass);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -161,25 +163,26 @@ h1, h2, h3, h4, h5, h6 {
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.75rem;
   text-decoration: none;
-  font-size: 1.45rem;
+  font-size: 1.35rem;
   font-weight: 800;
   font-family: var(--font-display);
   color: var(--text-primary);
   letter-spacing: -0.5px;
+  white-space: nowrap;
 }
 
 .brand-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   background: linear-gradient(135deg, var(--accent-orange), var(--accent-violet));
   border-radius: var(--radius-md);
   box-shadow: 0 4px 14px var(--accent-orange-glow);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
 }
 
 .brand-text-accent {
@@ -191,17 +194,19 @@ h1, h2, h3, h4, h5, h6 {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
+  white-space: nowrap;
 }
 
 .nav-link {
   color: var(--text-secondary);
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 600;
   transition: all 0.2s ease;
   position: relative;
   padding: 0.3rem 0;
+  white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -228,7 +233,7 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.3rem 0.8rem;
+  padding: 0.3rem 0.75rem;
   background: rgba(16, 185, 129, 0.1);
   border: 1px solid rgba(16, 185, 129, 0.25);
   border-radius: var(--radius-pill);
@@ -236,6 +241,176 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   font-family: var(--font-mono);
   color: #34d399;
+  white-space: nowrap;
+}
+
+/* Pacman Track Component */
+.pacman-track {
+  flex: 1;
+  max-width: 360px;
+  height: 28px;
+  margin: 0 1.5rem;
+  background: rgba(9, 12, 19, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-pill);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
+}
+
+.pacman-dots-bg {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 14px;
+  pointer-events: none;
+}
+
+.pacman-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #38bdf8;
+  opacity: 0.5;
+  box-shadow: 0 0 4px #38bdf8;
+}
+
+.pacman-energizer {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f97316;
+  box-shadow: 0 0 6px #f97316;
+  animation: pulse-dot 1.2s infinite;
+}
+
+/* Pacman Runner traversing left to right */
+.pacman-squad-runner {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: pacman-run-across 7s linear infinite;
+  will-change: transform;
+}
+
+/* Pacman Character */
+.pacman-char {
+  width: 18px;
+  height: 18px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.pacman-top {
+  width: 18px;
+  height: 9px;
+  background: #facc15;
+  border-radius: 9px 9px 0 0;
+  transform-origin: bottom center;
+  animation: chomp-top 0.35s infinite ease-in-out alternate;
+  box-shadow: 0 0 8px rgba(250, 204, 21, 0.6);
+}
+
+.pacman-bottom {
+  width: 18px;
+  height: 9px;
+  background: #facc15;
+  border-radius: 0 0 9px 9px;
+  transform-origin: top center;
+  animation: chomp-bottom 0.35s infinite ease-in-out alternate;
+  box-shadow: 0 0 8px rgba(250, 204, 21, 0.6);
+}
+
+/* Ghost Character (Blinky / Inky) */
+.ghost-char {
+  width: 16px;
+  height: 16px;
+  border-radius: 8px 8px 0 0;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.ghost-red {
+  background: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.7);
+}
+
+.ghost-cyan {
+  background: #06b6d4;
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.7);
+}
+
+.ghost-eyes {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  display: flex;
+  gap: 3px;
+}
+
+.ghost-eye {
+  width: 4px;
+  height: 5px;
+  background: #fff;
+  border-radius: 50%;
+  position: relative;
+}
+
+.ghost-eye::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  right: 0px;
+  width: 2px;
+  height: 2px;
+  background: #1e1b4b;
+  border-radius: 50%;
+}
+
+.ghost-skirt {
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ghost-tentacle {
+  width: 4px;
+  height: 4px;
+  border-radius: 0 0 2px 2px;
+}
+.ghost-red .ghost-tentacle { background: #ef4444; }
+.ghost-cyan .ghost-tentacle { background: #06b6d4; }
+
+@keyframes pacman-run-across {
+  0% { left: -70px; }
+  100% { left: 100%; }
+}
+
+@keyframes chomp-top {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-35deg); }
+}
+
+@keyframes chomp-bottom {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(35deg); }
+}
+
+@media (max-width: 960px) {
+  .pacman-track { display: none; }
 }
 
 /* Buttons */
@@ -244,11 +419,11 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
-  padding: 0.7rem 1.4rem;
+  padding: 0.65rem 1.3rem;
   border-radius: var(--radius-md);
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   border: 1px solid transparent;
@@ -685,7 +860,7 @@ footer {
 
 /* Responsive Breakpoints */
 @media (max-width: 768px) {
-  .navbar { padding: 1rem 1.25rem; }
+  .navbar { padding: 0.85rem 1.25rem; }
   .container { padding: 2rem 1rem; }
   .hero-title { font-size: 2.25rem; }
   .grid-3, .grid-4 { grid-template-columns: 1fr; }

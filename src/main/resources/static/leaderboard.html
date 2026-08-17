@@ -3,75 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Global Leaderboard — CodeClash</title>
+  <title>Global Leaderboard — CodeClash Arena</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* Podium Top 3 Grid */
     .podium-container {
       display: grid;
-      grid-template-columns: 1fr 1.15fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
-      align-items: end;
-      max-width: 900px;
-      margin: 2rem auto 3rem;
+      margin: 2.5rem 0 3.5rem;
+      align-items: flex-end;
     }
     @media (max-width: 768px) {
-      .podium-container {
-        grid-template-columns: 1fr;
-        align-items: stretch;
-      }
+      .podium-container { grid-template-columns: 1fr; }
     }
-
     .podium-card {
       background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
+      border: 1px solid var(--border-medium);
       border-radius: var(--radius-xl);
-      padding: 1.75rem 1.25rem;
+      padding: 2rem 1.5rem;
       text-align: center;
-      backdrop-filter: blur(14px);
       position: relative;
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow-md);
       transition: all 0.3s ease;
     }
-    .podium-1 {
-      border-color: rgba(245, 158, 11, 0.4);
-      background: linear-gradient(180deg, rgba(245, 158, 11, 0.1) 0%, rgba(19, 25, 38, 0.8) 100%);
-      box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15);
-      padding-top: 2.25rem;
+    .podium-card:hover {
+      transform: translateY(-4px);
     }
-    .podium-2 {
-      border-color: rgba(148, 163, 184, 0.3);
-      background: linear-gradient(180deg, rgba(148, 163, 184, 0.08) 0%, rgba(19, 25, 38, 0.8) 100%);
+    .podium-first {
+      border-color: rgba(245, 158, 11, 0.5);
+      box-shadow: 0 0 40px rgba(245, 158, 11, 0.2);
+      transform: scale(1.05);
+      background: rgba(30, 25, 18, 0.85);
     }
-    .podium-3 {
-      border-color: rgba(217, 119, 6, 0.3);
-      background: linear-gradient(180deg, rgba(217, 119, 6, 0.08) 0%, rgba(19, 25, 38, 0.8) 100%);
+    .podium-second {
+      border-color: rgba(148, 163, 184, 0.4);
+      box-shadow: 0 0 30px rgba(148, 163, 184, 0.15);
+    }
+    .podium-third {
+      border-color: rgba(217, 119, 6, 0.35);
+      box-shadow: 0 0 30px rgba(217, 119, 6, 0.15);
+    }
+    .podium-crown { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .podium-rank {
+      font-family: var(--font-mono);
+      font-weight: 900;
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+    .podium-name {
+      font-size: 1.35rem;
+      font-weight: 800;
+      font-family: var(--font-display);
+      margin-bottom: 0.4rem;
+    }
+    .podium-rating {
+      font-family: var(--font-mono);
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--accent-cyan);
     }
 
     /* Leaderboard Full Table */
-    .leaderboard-table {
+    .table-responsive {
       width: 100%;
-      border-collapse: collapse;
+      overflow-x: auto;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-xl);
-      overflow: hidden;
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(14px);
+    }
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
     }
     .leaderboard-table th, .leaderboard-table td {
       padding: 1.1rem 1.5rem;
-      text-align: left;
     }
     .leaderboard-table th {
-      background: rgba(13, 17, 26, 0.9);
+      background: rgba(13, 17, 26, 0.95);
       color: var(--text-secondary);
       font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       font-family: var(--font-display);
-      font-weight: 700;
       border-bottom: 1px solid var(--border-subtle);
     }
     .leaderboard-table tr:not(:last-child) td {
@@ -80,33 +100,12 @@
     .leaderboard-table tr:hover td {
       background: rgba(255, 255, 255, 0.02);
     }
-
-    .rank-badge {
-      font-family: var(--font-mono);
-      font-weight: 800;
-      width: 36px;
-      height: 36px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: var(--bg-input);
-      border: 1px solid var(--border-subtle);
-    }
-    .rank-1 { background: rgba(245, 158, 11, 0.2); color: var(--accent-orange); border-color: var(--accent-orange); }
-    .rank-2 { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border-color: #94a3b8; }
-    .rank-3 { background: rgba(217, 119, 6, 0.2); color: #d97706; border-color: #b45309; }
-
     .tier-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.25rem 0.65rem;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      padding: 0.2rem 0.55rem;
       border-radius: var(--radius-sm);
-      font-size: 0.75rem;
-      font-family: var(--font-display);
-      font-weight: 800;
-      text-transform: uppercase;
+      font-weight: 700;
     }
     .tier-grandmaster { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
     .tier-diamond { background: rgba(6, 182, 212, 0.15); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.3); }
@@ -114,86 +113,142 @@
   </style>
 </head>
 <body>
+  <!-- Top Navigation with Pac-Man Track -->
   <header class="navbar">
-    <a href="index.html" class="nav-brand">
-      <span class="brand-icon">⚔️</span>
-      <span>Code<span class="brand-text-accent">Clash</span></span>
-    </a>
-    <nav class="nav-links">
-      <a href="dashboard.html" class="btn btn-outline">Dashboard</a>
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <a href="index.html" class="nav-brand">
+        <span class="brand-icon">⚔️</span>
+        <span>Code<span class="brand-text-accent">Clash</span></span>
+      </a>
+      <div style="display: flex; align-items: center; gap: 1.25rem;">
+        <a href="index.html#challenges" class="nav-link">Challenges</a>
+        <a href="leaderboard.html" class="nav-link" style="color: var(--text-primary);">🏆 Leaderboard</a>
+      </div>
+    </div>
+
+    <!-- Retro Pac-Man Animated Navbar Track -->
+    <div class="pacman-track">
+      <div class="pacman-dots-bg">
+        <span class="pacman-dot"></span>
+        <span class="pacman-dot"></span>
+        <span class="pacman-energizer"></span>
+        <span class="pacman-dot"></span>
+        <span class="pacman-dot"></span>
+        <span class="pacman-dot"></span>
+        <span class="pacman-energizer"></span>
+        <span class="pacman-dot"></span>
+        <span class="pacman-dot"></span>
+        <span class="pacman-dot"></span>
+      </div>
+      <div class="pacman-squad-runner">
+        <div class="pacman-char">
+          <div class="pacman-top"></div>
+          <div class="pacman-bottom"></div>
+        </div>
+        <div class="ghost-char ghost-red">
+          <div class="ghost-eyes">
+            <div class="ghost-eye"></div>
+            <div class="ghost-eye"></div>
+          </div>
+          <div class="ghost-skirt">
+            <div class="ghost-tentacle"></div>
+            <div class="ghost-tentacle"></div>
+            <div class="ghost-tentacle"></div>
+          </div>
+        </div>
+        <div class="ghost-char ghost-cyan">
+          <div class="ghost-eyes">
+            <div class="ghost-eye"></div>
+            <div class="ghost-eye"></div>
+          </div>
+          <div class="ghost-skirt">
+            <div class="ghost-tentacle"></div>
+            <div class="ghost-tentacle"></div>
+            <div class="ghost-tentacle"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav-links" id="navAuth">
+      <span class="nav-status-pill">🟢 Arena Online</span>
+      <a href="login.html" class="btn btn-outline" style="padding: 0.45rem 1rem;">Login</a>
+      <a href="register.html" class="btn btn-primary" style="padding: 0.45rem 1.2rem;">Create Profile</a>
     </nav>
   </header>
 
   <main class="container">
     <div style="text-align: center; margin-bottom: 2.5rem;">
-      <span class="badge badge-medium" style="margin-bottom: 0.75rem;">OFFICIAL RANKINGS</span>
-      <h1 style="font-size: 2.5rem; font-weight: 900;">🏆 Global Duelist Ladder</h1>
-      <p style="color: var(--text-secondary); font-size: 1rem; max-width: 650px; margin: 0.5rem auto 0;">
-        Ranked by Chess-style Elo rating ($K=32$). Tie-breakers are awarded to earlier-registered duelists.
+      <span class="badge badge-medium" style="margin-bottom: 0.75rem;">GLOBAL 1V1 STANDINGS</span>
+      <h1 style="font-size: 2.8rem; font-weight: 900; letter-spacing: -1px;">Hall of Champions</h1>
+      <p style="color: var(--text-secondary); max-width: 600px; margin: 0.5rem auto 0; font-size: 1rem;">
+        Real-time Elo ratings and head-to-head records across all active CodeClash duelists.
       </p>
     </div>
 
     <!-- Top 3 Podium Cards -->
     <div class="podium-container" id="podiumArea" style="display: none;">
-      <!-- #2 Rank -->
-      <div class="podium-card podium-2" id="podium2">
-        <div style="font-size: 2rem; margin-bottom: 0.25rem;">🥈</div>
-        <div class="rank-badge rank-2" style="margin-bottom: 0.5rem;">#2</div>
-        <h3 style="font-size: 1.2rem; font-weight: 800;" id="podium2Name">---</h3>
-        <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan); font-size: 1.15rem; margin: 0.35rem 0;" id="podium2Elo">---- Elo</div>
-        <div style="color: var(--text-secondary); font-size: 0.8rem; font-family: var(--font-mono);" id="podium2Record">0W / 0L</div>
+      <!-- #2 Silver -->
+      <div class="podium-card podium-second">
+        <div class="podium-crown">🥈</div>
+        <div class="podium-rank" style="color: #94a3b8;">RANK #2</div>
+        <div class="podium-name" id="podium2Name">---</div>
+        <div class="podium-rating" id="podium2Rating">--- Elo</div>
+        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-family: var(--font-mono);" id="podium2Record">0W / 0L</div>
       </div>
 
-      <!-- #1 Rank (Grandmaster Crown) -->
-      <div class="podium-card podium-1" id="podium1">
-        <div style="font-size: 2.6rem; margin-bottom: 0.25rem;">👑</div>
-        <div class="rank-badge rank-1" style="margin-bottom: 0.5rem;">#1</div>
-        <h3 style="font-size: 1.35rem; font-weight: 900; color: #fbbf24;" id="podium1Name">---</h3>
-        <div style="font-family: var(--font-mono); font-weight: 800; color: #fbbf24; font-size: 1.3rem; margin: 0.35rem 0;" id="podium1Elo">---- Elo</div>
-        <div style="color: var(--text-secondary); font-size: 0.85rem; font-family: var(--font-mono);" id="podium1Record">0W / 0L</div>
+      <!-- #1 Gold Champion -->
+      <div class="podium-card podium-first">
+        <div class="podium-crown">👑</div>
+        <div class="podium-rank" style="color: var(--accent-orange);">GRANDMASTER #1</div>
+        <div class="podium-name" id="podium1Name" style="color: #fef08a;">---</div>
+        <div class="podium-rating" id="podium1Rating" style="color: #fbbf24;">--- Elo</div>
+        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-family: var(--font-mono);" id="podium1Record">0W / 0L</div>
       </div>
 
-      <!-- #3 Rank -->
-      <div class="podium-card podium-3" id="podium3">
-        <div style="font-size: 2rem; margin-bottom: 0.25rem;">🥉</div>
-        <div class="rank-badge rank-3" style="margin-bottom: 0.5rem;">#3</div>
-        <h3 style="font-size: 1.2rem; font-weight: 800;" id="podium3Name">---</h3>
-        <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan); font-size: 1.15rem; margin: 0.35rem 0;" id="podium3Elo">---- Elo</div>
-        <div style="color: var(--text-secondary); font-size: 0.8rem; font-family: var(--font-mono);" id="podium3Record">0W / 0L</div>
+      <!-- #3 Bronze -->
+      <div class="podium-card podium-third">
+        <div class="podium-crown">🥉</div>
+        <div class="podium-rank" style="color: #d97706;">RANK #3</div>
+        <div class="podium-name" id="podium3Name">---</div>
+        <div class="podium-rating" id="podium3Rating">--- Elo</div>
+        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-family: var(--font-mono);" id="podium3Record">0W / 0L</div>
       </div>
     </div>
 
     <!-- Search / Filter Bar -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
-      <div style="font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; color: var(--text-secondary);" id="activeDuelistCount">
-        All Active Duelists
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 1.15rem;">
+        Active Duelists (<span id="totalDuelistsCount">0</span>)
       </div>
-      <div style="width: 280px;">
-        <input type="text" id="searchInput" class="form-input" placeholder="🔍 Search duelist..." oninput="handleSearch()" style="padding: 0.6rem 1rem;">
+      <div style="position: relative; width: 280px;">
+        <input type="text" class="form-input" id="searchPlayerInput" placeholder="🔍 Search duelist handle..." oninput="handleSearch()" style="padding: 0.55rem 1rem; font-size: 0.88rem;">
       </div>
     </div>
 
-    <!-- Full Leaderboard Table -->
-    <table class="leaderboard-table">
-      <thead>
-        <tr>
-          <th style="width: 80px;">Rank</th>
-          <th>Duelist</th>
-          <th>Division Tier</th>
-          <th>Elo Rating</th>
-          <th>Matches</th>
-          <th>W / L / D</th>
-          <th>Win Rate</th>
-        </tr>
-      </thead>
-      <tbody id="leaderboardBody">
-        <tr>
-          <td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-muted);">
-            Loading global rankings...
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Main Rankings Table -->
+    <div class="table-responsive">
+      <table class="leaderboard-table">
+        <thead>
+          <tr>
+            <th style="width: 80px;">Rank</th>
+            <th>Duelist</th>
+            <th>Division Tier</th>
+            <th>Elo Rating</th>
+            <th>Matches Duelled</th>
+            <th>Record (W / L)</th>
+            <th>Win Rate</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+              Loading leaderboard data...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </main>
 
   <footer>
@@ -205,105 +260,119 @@
 
   <script src="js/api.js"></script>
   <script>
-    let leaderboardUsers = [];
+    let rawDuelists = [];
+
+    async function checkAuth() {
+      try {
+        const user = await API.getCurrentUser();
+        if (user && user.username) {
+          const navAuth = document.getElementById('navAuth');
+          navAuth.innerHTML = `
+            <span class="nav-status-pill">🟢 Arena Online</span>
+            <span style="color: var(--accent-cyan); font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;">👤 ${user.username} (${user.rating} Elo)</span>
+            <a href="dashboard.html" class="btn btn-primary" style="padding: 0.45rem 1.2rem;">Dashboard</a>
+          `;
+        }
+      } catch (e) {}
+    }
 
     async function loadLeaderboard() {
       const tbody = document.getElementById('leaderboardBody');
       try {
-        const page = await API.getLeaderboard(0, 50);
-        leaderboardUsers = page.content || [];
+        const page = await API.getLeaderboard(0, 100);
+        rawDuelists = page.content || [];
+        document.getElementById('totalDuelistsCount').innerText = rawDuelists.length;
 
-        if (leaderboardUsers.length === 0) {
+        if (rawDuelists.length === 0) {
           tbody.innerHTML = `
             <tr>
-              <td colspan="7" style="text-align:center; padding:3.5rem 1rem; color:var(--text-muted);">
-                <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">⚔️</div>
-                <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); font-family: var(--font-display);">No active duelists yet!</div>
-                <div style="font-size: 0.9rem; margin-top: 0.35rem;">Players must complete at least 1 match in the Arena to appear on the official ladder.</div>
+              <td colspan="7" style="text-align: center; padding: 3.5rem; color: var(--text-muted);">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚔️</div>
+                <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.25rem;">No matches played yet!</div>
+                <div>Be the first to challenge a rival and claim the #1 Grandmaster spot on the ladder.</div>
               </td>
             </tr>
           `;
           return;
         }
 
-        renderPodium(leaderboardUsers);
-        renderTable(leaderboardUsers);
-        document.getElementById('activeDuelistCount').innerText = `${leaderboardUsers.length} Active Duelists`;
+        // Render Podium if >= 3 players
+        if (rawDuelists.length >= 3) {
+          document.getElementById('podiumArea').style.display = 'grid';
+          // #1 Gold
+          document.getElementById('podium1Name').innerText = rawDuelists[0].username;
+          document.getElementById('podium1Rating').innerText = `${rawDuelists[0].rating} Elo`;
+          document.getElementById('podium1Record').innerText = `${rawDuelists[0].wins}W / ${rawDuelists[0].losses}L`;
+
+          // #2 Silver
+          document.getElementById('podium2Name').innerText = rawDuelists[1].username;
+          document.getElementById('podium2Rating').innerText = `${rawDuelists[1].rating} Elo`;
+          document.getElementById('podium2Record').innerText = `${rawDuelists[1].wins}W / ${rawDuelists[1].losses}L`;
+
+          // #3 Bronze
+          document.getElementById('podium3Name').innerText = rawDuelists[2].username;
+          document.getElementById('podium3Rating').innerText = `${rawDuelists[2].rating} Elo`;
+          document.getElementById('podium3Record').innerText = `${rawDuelists[2].wins}W / ${rawDuelists[2].losses}L`;
+        }
+
+        renderTable(rawDuelists);
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--accent-red);">Failed to load rankings: ${err.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 2rem; color: var(--accent-red);">Failed to load leaderboard.</td></tr>`;
       }
     }
 
-    function renderPodium(users) {
-      if (users.length >= 1) {
-        document.getElementById('podiumArea').style.display = 'grid';
-        document.getElementById('podium1Name').innerText = users[0].username;
-        document.getElementById('podium1Elo').innerText = `${users[0].rating} Elo`;
-        document.getElementById('podium1Record').innerText = `${users[0].wins}W / ${users[0].losses}L (${users[0].matchesPlayed} Matches)`;
-      }
-      if (users.length >= 2) {
-        document.getElementById('podium2Name').innerText = users[1].username;
-        document.getElementById('podium2Elo').innerText = `${users[1].rating} Elo`;
-        document.getElementById('podium2Record').innerText = `${users[1].wins}W / ${users[1].losses}L`;
-      }
-      if (users.length >= 3) {
-        document.getElementById('podium3Name').innerText = users[2].username;
-        document.getElementById('podium3Elo').innerText = `${users[2].rating} Elo`;
-        document.getElementById('podium3Record').innerText = `${users[2].wins}W / ${users[2].losses}L`;
-      }
-    }
-
-    function renderTable(users) {
+    function renderTable(list) {
       const tbody = document.getElementById('leaderboardBody');
-      if (users.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--text-muted);">No duelists match your search query.</td></tr>`;
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-muted);">No duelists matching search.</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = users.map((u, idx) => {
+      tbody.innerHTML = list.map((u, idx) => {
         const rank = idx + 1;
-        let rankClass = '';
-        if (rank === 1) rankClass = 'rank-1';
-        else if (rank === 2) rankClass = 'rank-2';
-        else if (rank === 3) rankClass = 'rank-3';
-
-        let tierClass = 'tier-gold';
-        let tierName = 'Gold';
-        if (u.rating >= 1300) { tierClass = 'tier-grandmaster'; tierName = 'Grandmaster'; }
-        else if (u.rating >= 1200) { tierClass = 'tier-diamond'; tierName = 'Diamond'; }
-
         const winRate = u.matchesPlayed > 0 ? Math.round((u.wins / u.matchesPlayed) * 100) : 0;
+        
+        let rankBadge = `#${rank}`;
+        if (rank === 1) rankBadge = '👑 #1';
+        if (rank === 2) rankBadge = '🥈 #2';
+        if (rank === 3) rankBadge = '🥉 #3';
+
+        let tierTag = '<span class="tier-badge tier-gold">Gold</span>';
+        if (u.rating >= 1400) tierTag = '<span class="tier-badge tier-grandmaster">Grandmaster</span>';
+        else if (u.rating >= 1250) tierTag = '<span class="tier-badge tier-diamond">Diamond</span>';
 
         return `
           <tr>
-            <td><span class="rank-badge ${rankClass}">#${rank}</span></td>
-            <td style="font-weight: 700; color: var(--text-primary); font-family: var(--font-display); font-size: 1.05rem;">
-              ${rank === 1 ? '👑 ' : ''}${u.username}
+            <td style="font-family: var(--font-mono); font-weight: 800; color: ${rank === 1 ? 'var(--accent-orange)' : 'var(--text-secondary)'};">
+              ${rankBadge}
             </td>
-            <td><span class="tier-badge ${tierClass}">${tierName}</span></td>
+            <td style="font-weight: 700; color: var(--text-primary); font-family: var(--font-display); font-size: 1.02rem;">
+              ${u.username}
+            </td>
+            <td>${tierTag}</td>
             <td>
-              <span style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan); font-size: 1.1rem;">
+              <span style="font-family: var(--font-mono); font-weight: 900; color: var(--accent-cyan); font-size: 1.05rem;">
                 ${u.rating}
               </span>
             </td>
-            <td style="color: var(--text-secondary); font-family: var(--font-mono); font-weight: 600;">${u.matchesPlayed}</td>
-            <td style="color: var(--text-secondary); font-family: var(--font-mono);">
+            <td style="color: var(--text-secondary); font-family: var(--font-mono);">${u.matchesPlayed}</td>
+            <td style="font-family: var(--font-mono);">
               <span style="color: var(--accent-green); font-weight: 700;">${u.wins}W</span> / 
-              <span style="color: var(--accent-red); font-weight: 700;">${u.losses}L</span> / 
-              <span style="color: var(--accent-orange); font-weight: 700;">${u.draws}D</span>
+              <span style="color: var(--accent-red); font-weight: 700;">${u.losses}L</span>
             </td>
-            <td style="font-weight: 800; color: var(--accent-orange); font-family: var(--font-mono);">${winRate}%</td>
+            <td style="font-weight: 700; color: var(--accent-orange); font-family: var(--font-mono);">${winRate}%</td>
           </tr>
         `;
       }).join('');
     }
 
     function handleSearch() {
-      const q = document.getElementById('searchInput').value.trim().toLowerCase();
-      const filtered = leaderboardUsers.filter(u => u.username.toLowerCase().includes(q));
+      const q = document.getElementById('searchPlayerInput').value.trim().toLowerCase();
+      const filtered = rawDuelists.filter(u => u.username.toLowerCase().includes(q));
       renderTable(filtered);
     }
 
+    checkAuth();
     loadLeaderboard();
   </script>
 </body>
