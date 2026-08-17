@@ -7,32 +7,33 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header class="navbar">
     <a href="index.html" class="nav-brand">
       <span class="brand-icon">⚔️</span>
-      <span>CodeClash</span>
+      <span>Code<span class="brand-text-accent">Clash</span></span>
     </a>
     <nav class="nav-links">
-      <a href="login.html" class="btn btn-outline">Login</a>
+      <a href="login.html" class="btn btn-outline">Existing Player Login</a>
     </nav>
   </header>
 
-  <main class="container">
-    <div class="auth-wrapper">
+  <main class="container" style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 170px);">
+    <div class="auth-wrapper" style="width: 100%; max-width: 460px; margin: 0 auto;">
       <div class="auth-header">
-        <h2>Create Account</h2>
-        <p>Join the LAN 1v1 battle ladder</p>
+        <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">👑</div>
+        <h2>Create Duelist Profile</h2>
+        <p>Start with a default 1200 Elo and climb the rankings</p>
       </div>
 
       <div id="alertBox" class="alert"></div>
 
       <form id="registerForm">
         <div class="form-group">
-          <label class="form-label" for="username">Username</label>
-          <input type="text" id="username" class="form-input" placeholder="e.g. byte_master" required minlength="3" autocomplete="username">
+          <label class="form-label" for="username">Duelist Handle (Username)</label>
+          <input type="text" id="username" class="form-input" placeholder="e.g. algo_ninja" required minlength="3" autocomplete="username">
         </div>
 
         <div class="form-group">
@@ -45,16 +46,23 @@
           <input type="password" id="password" class="form-input" placeholder="At least 6 characters" required minlength="6" autocomplete="new-password">
         </div>
 
-        <button type="submit" class="btn btn-primary" id="submitBtn" style="width: 100%; margin-top: 0.5rem;">
-          Create Player Profile
+        <button type="submit" class="btn btn-primary" id="submitBtn" style="width: 100%; margin-top: 0.75rem; padding: 0.85rem;">
+          ⚡ Initialize Player Profile
         </button>
       </form>
 
-      <p style="text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-secondary);">
-        Already have an account? <a href="login.html" style="color: var(--accent-cyan); text-decoration: none; font-weight: 600;">Login here</a>
+      <p style="text-align: center; margin-top: 1.75rem; font-size: 0.88rem; color: var(--text-secondary);">
+        Already have a profile? <a href="login.html" style="color: var(--accent-cyan); text-decoration: none; font-weight: 700; font-family: var(--font-display);">Login to battle</a>
       </p>
     </div>
   </main>
+
+  <footer>
+    <div class="footer-content">
+      <div>⚔️ CodeClash — 1v1 Competitive Coding Platform</div>
+      <div style="color: var(--text-muted); font-size: 0.85rem;">&copy; 2026 CodeClash</div>
+    </div>
+  </footer>
 
   <script src="js/api.js"></script>
   <script>
@@ -66,7 +74,7 @@
       e.preventDefault();
       alertBox.style.display = 'none';
       submitBtn.disabled = true;
-      submitBtn.innerText = 'Creating account...';
+      submitBtn.innerText = 'Creating profile...';
 
       const username = document.getElementById('username').value.trim();
       const email = document.getElementById('email').value.trim();
@@ -76,11 +84,11 @@
         const response = await API.register(username, email, password);
         if (response.success) {
           alertBox.className = 'alert alert-success';
-          alertBox.innerText = 'Account created successfully! Redirecting to arena...';
+          alertBox.innerText = '✓ Profile created! Loading dashboard...';
           alertBox.style.display = 'block';
           setTimeout(() => {
             window.location.href = 'dashboard.html';
-          }, 900);
+          }, 700);
         } else {
           alertBox.className = 'alert alert-error';
           alertBox.innerText = response.message || 'Registration failed';
@@ -92,7 +100,7 @@
         alertBox.style.display = 'block';
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerText = 'Create Player Profile';
+        submitBtn.innerText = '⚡ Initialize Player Profile';
       }
     });
   </script>

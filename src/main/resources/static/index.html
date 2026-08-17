@@ -3,77 +3,370 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CodeClash — 1v1 LAN Competitive Coding</title>
+  <title>CodeClash — 1v1 Competitive Coding Arena</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Hero Preview Typing Code */
+    .typing-terminal {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #93c5fd;
+      background: #06090e;
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      min-height: 140px;
+    }
+    .code-keyword { color: #f43f5e; font-weight: 700; }
+    .code-type { color: #38bdf8; }
+    .code-string { color: #34d399; }
+    .code-func { color: #fbbf24; }
+
+    /* Filter Chips */
+    .filter-chip {
+      padding: 0.4rem 0.9rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      font-family: var(--font-display);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .filter-chip.active, .filter-chip:hover {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--accent-violet);
+      color: #fff;
+    }
+
+    /* Leaderboard Preview Table */
+    .mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .mini-table th, .mini-table td {
+      padding: 0.9rem 1.25rem;
+      text-align: left;
+    }
+    .mini-table th {
+      background: rgba(13, 17, 26, 0.9);
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-family: var(--font-display);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .mini-table tr:not(:last-child) td {
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .mini-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+  </style>
 </head>
 <body>
-  <!-- Navigation -->
+  <!-- Top Navigation -->
   <header class="navbar">
     <a href="index.html" class="nav-brand">
       <span class="brand-icon">⚔️</span>
-      <span>CodeClash</span>
+      <span>Code<span class="brand-text-accent">Clash</span></span>
     </a>
     <nav class="nav-links" id="navLinks">
+      <a href="#how-it-works" class="nav-link">How It Works</a>
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#challenges" class="nav-link">Challenges</a>
       <a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a>
       <a href="login.html" class="btn btn-outline" id="loginBtn">Login</a>
       <a href="register.html" class="btn btn-primary" id="registerBtn">Register</a>
     </nav>
   </header>
 
+  <!-- Live Activity Ticker -->
+  <div class="ticker-wrapper">
+    <div class="ticker-badge">⚡ LIVE RADAR</div>
+    <div class="ticker-content" id="tickerMsg">
+      ⚔️ No active duel in progress right now — It could be you and your friend! Create a private room to ignite the battle &bull; Chess-style Elo Rating System (K=32) Active &bull; Real-time Sandboxed Java Judge Engine &bull; Instant 1v1 Matchmaking
+    </div>
+  </div>
+
   <main class="container">
     <!-- Hero Section -->
-    <section class="hero">
-      <div class="hero-badge">⚡ LAN Real-Time 1v1 Battles</div>
-      <h1 class="hero-title">Face Off in Live Head-to-Head Coding Duels</h1>
+    <section class="hero-wrapper">
+      <div class="hero-pill">
+        <span class="hero-pill-dot"></span>
+        <span>1v1 REAL-TIME CODE DUELS</span>
+      </div>
+      
+      <h1 class="hero-title">
+        Code Fast. Climb the Ladder. <br>
+        <span class="gradient-text-battle">Win the Duel.</span>
+      </h1>
+      
       <p class="hero-subtitle">
-        Create private room lobbies, solve algorithmic challenges in real time, compile and evaluate Java code instantly, and climb the local Elo ladder.
+        Enter private battle rooms, face off in synchronized live algorithmic coding duels, compile Java in real time with an automated judge engine, and steal Chess-style Elo rating points from your rivals.
       </p>
+      
       <div class="hero-actions">
-        <a href="register.html" class="btn btn-primary" style="padding: 0.8rem 1.8rem; font-size: 1.05rem;">Get Started</a>
-        <a href="#problems" class="btn btn-outline" style="padding: 0.8rem 1.8rem; font-size: 1.05rem;">Explore Problems</a>
+        <a href="register.html" class="btn btn-primary" style="padding: 0.85rem 2.2rem; font-size: 1.05rem;">
+          ⚔️ Enter Battle Arena
+        </a>
+        <a href="#challenges" class="btn btn-outline" style="padding: 0.85rem 2rem; font-size: 1.05rem;">
+          ⚡ Explore Challenges
+        </a>
+      </div>
+
+      <!-- Interactive Duel Preview Widget -->
+      <div class="hero-preview-container">
+        <div class="hero-preview-header">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--accent-red);"></span>
+            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--accent-orange);"></span>
+            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--accent-green);"></span>
+            <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); margin-left: 0.5rem;">Arena Match #124 • Valid Parentheses (Medium)</span>
+          </div>
+          <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-orange); font-size: 0.9rem;">
+            ⏱️ 14:18 Remaining
+          </div>
+        </div>
+
+        <div class="hero-preview-grid">
+          <!-- Player 1 Terminal -->
+          <div class="preview-player-pane">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <span style="font-weight: 700; font-family: var(--font-display);">👑 alex <span style="color: var(--accent-cyan); font-family: var(--font-mono); font-size: 0.85rem;">(1216 Elo)</span></span>
+              <span class="badge badge-easy">Writing Code</span>
+            </div>
+            <div class="typing-terminal">
+              <span class="code-keyword">Stack</span>&lt;<span class="code-type">Character</span>&gt; stack = <span class="code-keyword">new</span> <span class="code-keyword">Stack</span>&lt;&gt;();<br>
+              <span class="code-keyword">for</span> (<span class="code-type">char</span> c : s.<span class="code-func">toCharArray</span>()) {<br>
+              &nbsp;&nbsp;<span class="code-keyword">if</span> (c == <span class="code-string">'('</span> || c == <span class="code-string">'{'</span>) stack.<span class="code-func">push</span>(c);<br>
+              &nbsp;&nbsp;<span class="code-keyword">else</span> <span class="code-keyword">if</span> (stack.<span class="code-func">isEmpty</span>()) <span class="code-keyword">return</span> <span class="code-string">"false"</span>;<br>
+              }
+            </div>
+          </div>
+
+          <!-- Central VS Energy -->
+          <div class="preview-vs-sphere">
+            VS
+          </div>
+
+          <!-- Player 2 Radar -->
+          <div class="preview-player-pane">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <span style="font-weight: 700; font-family: var(--font-display);">🤺 sarah <span style="color: var(--accent-cyan); font-family: var(--font-mono); font-size: 0.85rem;">(1184 Elo)</span></span>
+              <span class="badge badge-medium">Testing Cases</span>
+            </div>
+            <div class="typing-terminal" style="color: #6ee7b7;">
+              <div style="color: var(--text-muted); font-size: 0.75rem; margin-bottom: 0.4rem;">// Test Execution Progress:</div>
+              <div>[✓] Public Case #1: PASSED (14ms)</div>
+              <div>[✓] Public Case #2: PASSED (18ms)</div>
+              <div style="color: var(--accent-orange); margin-top: 0.4rem;">&gt; Running Hidden Secret Tests (2/2)...</div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Problem Showcase -->
-    <section id="problems" style="margin-top: 2rem;">
-      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem;">
+    <!-- How It Works Flow -->
+    <section id="how-it-works" style="margin-top: 6rem;">
+      <div style="text-align: center; margin-bottom: 3.5rem;">
+        <span class="badge badge-easy" style="margin-bottom: 0.75rem;">BATTLE CYCLE</span>
+        <h2 style="font-size: 2.2rem; font-weight: 800;">How CodeClash Works</h2>
+        <p style="color: var(--text-secondary); max-width: 600px; margin: 0.5rem auto 0;">From room creation to rating victory in 4 simple steps.</p>
+      </div>
+
+      <div class="grid-4">
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <div style="font-size: 2rem; margin-bottom: 0.75rem;">🎮</div>
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.4rem;">Create Private Room</h3>
+          <p style="color: var(--text-secondary); font-size: 0.88rem;">Generate a unique 6-character room code with 1-click clipboard copy.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <div style="font-size: 2rem; margin-bottom: 0.75rem;">🤝</div>
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.4rem;">Sync in 1v1 Lobby</h3>
+          <p style="color: var(--text-secondary); font-size: 0.88rem;">Your opponent joins with the code. Real-time polling connects both player cards.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <div style="font-size: 2rem; margin-bottom: 0.75rem;">⚡</div>
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.4rem;">Solve Live in Arena</h3>
+          <p style="color: var(--text-secondary); font-size: 0.88rem;">Both players receive the same challenge. Code in Monaco Editor and test against the judge engine.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">04</div>
+          <div style="font-size: 2rem; margin-bottom: 0.75rem;">🏆</div>
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.4rem;">Climb the Elo Ladder</h3>
+          <p style="color: var(--text-secondary); font-size: 0.88rem;">The first to pass all test cases wins the duel and steals Elo rating points immediately!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Features Grid -->
+    <section id="features" style="margin-top: 6rem;">
+      <div style="text-align: center; margin-bottom: 3.5rem;">
+        <span class="badge badge-medium" style="margin-bottom: 0.75rem;">ENGINE CAPABILITIES</span>
+        <h2 style="font-size: 2.2rem; font-weight: 800;">Built for Pure Competitive Coding</h2>
+        <p style="color: var(--text-secondary); max-width: 600px; margin: 0.5rem auto 0;">Architected with industrial-grade compilation, sandboxing, and real-time state synchronization.</p>
+      </div>
+
+      <div class="grid-2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem;">
+        <div class="card">
+          <div class="card-feature-icon" style="color: var(--accent-cyan); background: rgba(6, 182, 212, 0.12); border-color: rgba(6, 182, 212, 0.3);">⚡</div>
+          <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Sub-Second Judge Engine</h3>
+          <p style="color: var(--text-secondary); font-size: 0.92rem;">
+            Automated Java compilation via isolated subprocesses with 3-second watchdog timer protection against infinite loops and runtime errors.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-feature-icon" style="color: var(--accent-orange); background: rgba(249, 115, 22, 0.12); border-color: rgba(249, 115, 22, 0.3);">⏱️</div>
+          <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Real-Time Opponent Telemetry</h3>
+          <p style="color: var(--text-secondary); font-size: 0.92rem;">
+            Watch your rival's progress live in the Arena. See when they run test cases, submit code, or struggle with edge cases in real time.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-feature-icon" style="color: var(--accent-violet); background: rgba(99, 102, 241, 0.12); border-color: rgba(99, 102, 241, 0.3);">🏆</div>
+          <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Chess-Style Elo Rating Ladder</h3>
+          <p style="color: var(--text-secondary); font-size: 0.92rem;">
+            Standard $K=32$ Elo ranking engine accurately rewards underdogs and penalizes favorites, maintaining an authentic competitive ladder.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-feature-icon" style="color: var(--accent-green); background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.3);">🌐</div>
+          <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">24/7 Cloud & Mobile Friendly</h3>
+          <p style="color: var(--text-secondary); font-size: 0.92rem;">
+            Zero installation required for players. Battle from any browser on laptops, tablets, or mobile phones anytime, anywhere on the web.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Challenge Library Pool -->
+    <section id="challenges" style="margin-top: 6rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; flex-wrap: wrap; gap: 1.5rem;">
         <div>
-          <h2 style="font-size: 1.5rem; font-weight: 800;">⚔️ Battle Challenge Library</h2>
-          <p style="color: var(--text-secondary); font-size: 0.9rem;">Pre-loaded algorithmic problems ready for match duels</p>
+          <span class="badge badge-easy" style="margin-bottom: 0.75rem;">CHALLENGE VAULT</span>
+          <h2 style="font-size: 2.2rem; font-weight: 800;">Battle Challenge Library</h2>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">Carefully curated algorithmic problems ready for 1v1 duels</p>
+        </div>
+        <!-- Filter Controls -->
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="filterContainer">
+          <button class="filter-chip active" onclick="filterChallenges('ALL')">All Challenges</button>
+          <button class="filter-chip" onclick="filterChallenges('EASY')">Easy</button>
+          <button class="filter-chip" onclick="filterChallenges('MEDIUM')">Medium</button>
+          <button class="filter-chip" onclick="filterChallenges('HARD')">Hard</button>
         </div>
       </div>
 
-      <div class="grid-2" id="problemsList">
-        <div style="text-align: center; grid-column: 1 / -1; padding: 2rem; color: var(--text-muted);">
+      <!-- Problem Cards Grid -->
+      <div class="grid-3" id="problemsList">
+        <div style="text-align: center; grid-column: 1 / -1; padding: 3rem; color: var(--text-muted);">
           Loading challenge pool...
         </div>
       </div>
     </section>
+
+    <!-- Leaderboard Preview Section -->
+    <section id="leaderboard-preview" style="margin-top: 6rem; margin-bottom: 3rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="badge badge-medium" style="margin-bottom: 0.75rem;">RANKINGS</span>
+          <h2 style="font-size: 2.2rem; font-weight: 800;">Top Duelists</h2>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">The highest rated active players in CodeClash</p>
+        </div>
+        <a href="leaderboard.html" class="btn btn-outline" style="padding: 0.6rem 1.4rem;">
+          View Full Leaderboard →
+        </a>
+      </div>
+
+      <table class="mini-table">
+        <thead>
+          <tr>
+            <th style="width: 70px;">Rank</th>
+            <th>Duelist</th>
+            <th>Rating</th>
+            <th>Matches</th>
+            <th>Record (W/L)</th>
+            <th>Win Rate</th>
+          </tr>
+        </thead>
+        <tbody id="topLeaderboardBody">
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+              Loading top duelists...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
   </main>
 
+  <!-- Modern Tech Stack Footer -->
   <footer>
-    <p>CodeClash — LAN 1v1 Competitive Coding Engine • Spring Boot + MySQL</p>
+    <div class="footer-content">
+      <div>
+        <div style="font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; color: var(--text-primary); margin-bottom: 0.4rem;">
+          ⚔️ CodeClash
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">
+          The next-generation competitive 1v1 coding arena.
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <span class="tech-pill">☕ Java 21</span>
+        <span class="tech-pill">🍃 Spring Boot 3</span>
+        <span class="tech-pill">🐬 MySQL / H2</span>
+        <span class="tech-pill">📝 Monaco Editor</span>
+        <span class="tech-pill">🐳 Docker Cloud</span>
+      </div>
+
+      <div style="color: var(--text-muted); font-size: 0.85rem;">
+        &copy; 2026 CodeClash &bull; Built for competitive coders.
+      </div>
+    </div>
   </footer>
 
   <script src="js/api.js"></script>
   <script>
-    // Check if user is logged in
+    let allProblemsData = [];
+
+    // Check authentication state
     async function checkAuth() {
       try {
         const user = await API.getCurrentUser();
         if (user && user.username) {
           const navLinks = document.getElementById('navLinks');
           navLinks.innerHTML = `
-            <span style="color: var(--accent-cyan); font-weight: 600; font-size: 0.95rem;">👤 ${user.username} (${user.rating} Elo)</span>
-            <a href="dashboard.html" class="btn btn-primary">Dashboard</a>
-            <button onclick="handleLogout()" class="btn btn-outline">Logout</button>
+            <a href="#how-it-works" class="nav-link">How It Works</a>
+            <a href="#challenges" class="nav-link">Challenges</a>
+            <a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a>
+            <span style="color: var(--accent-cyan); font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;">👤 ${user.username} (${user.rating} Elo)</span>
+            <a href="dashboard.html" class="btn btn-primary" style="padding: 0.5rem 1.2rem;">Dashboard</a>
+            <button onclick="handleLogout()" class="btn btn-outline" style="padding: 0.5rem 1rem;">Logout</button>
           `;
         }
       } catch (e) {
-        // Not logged in, defaults remain
+        // Guest mode, standard login/register buttons remain
       }
     }
 
@@ -82,35 +375,118 @@
       window.location.reload();
     }
 
-    // Load Problems
+    // Load Problems and Render Cards
     async function loadProblems() {
       const container = document.getElementById('problemsList');
       try {
-        const problems = await API.getProblems();
-        if (!problems || problems.length === 0) {
-          container.innerHTML = `<div style="text-align:center; grid-column:1/-1; color: var(--text-muted);">No problems found. Start the server to seed initial challenges!</div>`;
+        allProblemsData = await API.getProblems();
+        renderProblems(allProblemsData);
+      } catch (err) {
+        container.innerHTML = `<div style="text-align:center; grid-column:1/-1; color: var(--accent-red);">Failed to connect to backend server. Make sure the application is active!</div>`;
+      }
+    }
+
+    function renderProblems(problems) {
+      const container = document.getElementById('problemsList');
+      if (!problems || problems.length === 0) {
+        container.innerHTML = `<div style="text-align:center; grid-column:1/-1; color: var(--text-muted); padding: 3rem;">No problems found matching this filter.</div>`;
+        return;
+      }
+
+      const tagsMap = {
+        'two-sum': ['Arrays', 'Hash Table', 'Two Pointers'],
+        'palindrome-number': ['Math', 'String Manipulation'],
+        'valid-parentheses': ['Stack', 'Strings', 'Data Structures']
+      };
+
+      container.innerHTML = problems.map(p => {
+        const tags = tagsMap[p.slug] || ['Algorithms', 'Logic'];
+        return `
+          <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 800;">${p.title}</h3>
+                <span class="badge badge-${p.difficulty.toLowerCase()}">${p.difficulty}</span>
+              </div>
+              <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1rem; line-height: 1.5;">
+                ⏱️ ${Math.floor(p.timeLimitSeconds / 60)} min limit &bull; 💾 ${p.memoryLimitMb} MB memory &bull; ☕ Java
+              </p>
+              <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                ${tags.map(t => `<span class="badge badge-tag">${t}</span>`).join('')}
+              </div>
+            </div>
+            <a href="arena.html?problemId=${p.id}" class="btn btn-outline" style="width: 100%; border-color: rgba(6, 182, 212, 0.3);">
+              ⚡ Practice in Arena
+            </a>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterChallenges(diff) {
+      const chips = document.querySelectorAll('.filter-chip');
+      chips.forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (diff === 'ALL') {
+        renderProblems(allProblemsData);
+      } else {
+        const filtered = allProblemsData.filter(p => p.difficulty === diff);
+        renderProblems(filtered);
+      }
+    }
+
+    // Load Top 5 Leaderboard Preview
+    async function loadTopLeaderboard() {
+      const tbody = document.getElementById('topLeaderboardBody');
+      try {
+        const page = await API.getLeaderboard(0, 5);
+        const users = page.content || [];
+
+        if (users.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align:center; padding:2.5rem; color:var(--text-muted);">
+                ⚔️ No active duelists yet! Be the first to play a match and claim the #1 spot.
+              </td>
+            </tr>
+          `;
           return;
         }
 
-        container.innerHTML = problems.map(p => `
-          <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-              <h3 style="font-size: 1.15rem; font-weight: 700;">${p.title}</h3>
-              <span class="badge badge-${p.difficulty.toLowerCase()}">${p.difficulty}</span>
-            </div>
-            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.25rem;">
-              Time Limit: ${Math.floor(p.timeLimitSeconds / 60)} min • Memory: ${p.memoryLimitMb} MB
-            </p>
-            <a href="arena.html?problemId=${p.id}" class="btn btn-primary" style="width: 100%;">Solve Challenge</a>
-          </div>
-        `).join('');
-      } catch (err) {
-        container.innerHTML = `<div style="text-align:center; grid-column:1/-1; color: var(--accent-red);">Failed to connect to backend server. Make sure Spring Boot is running!</div>`;
+        tbody.innerHTML = users.map((u, idx) => {
+          const rank = idx + 1;
+          const winRate = u.matchesPlayed > 0 ? Math.round((u.wins / u.matchesPlayed) * 100) : 0;
+          return `
+            <tr>
+              <td style="font-family: var(--font-mono); font-weight: 800; color: ${rank === 1 ? 'var(--accent-orange)' : 'var(--text-secondary)'};">
+                ${rank === 1 ? '👑 #1' : `#${rank}`}
+              </td>
+              <td style="font-weight: 700; color: var(--text-primary); font-family: var(--font-display);">
+                ${u.username}
+              </td>
+              <td>
+                <span style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan); font-size: 1rem;">
+                  ${u.rating}
+                </span>
+              </td>
+              <td style="color: var(--text-secondary); font-family: var(--font-mono);">${u.matchesPlayed}</td>
+              <td style="color: var(--text-secondary); font-family: var(--font-mono);">
+                <span style="color: var(--accent-green); font-weight: 700;">${u.wins}W</span> / 
+                <span style="color: var(--accent-red); font-weight: 700;">${u.losses}L</span>
+              </td>
+              <td style="font-weight: 700; color: var(--accent-orange); font-family: var(--font-mono);">${winRate}%</td>
+            </tr>
+          `;
+        }).join('');
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-muted);">Leaderboard rankings will appear once duelists begin matches.</td></tr>`;
       }
     }
 
     checkAuth();
     loadProblems();
+    loadTopLeaderboard();
   </script>
 </body>
 </html>

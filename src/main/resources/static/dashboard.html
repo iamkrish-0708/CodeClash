@@ -7,40 +7,50 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     .stats-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
     }
     .stat-card {
       background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 1.25rem;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.25rem;
       text-align: center;
+      backdrop-filter: blur(12px);
+      transition: all 0.25s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
     }
     .stat-val {
-      font-size: 1.8rem;
+      font-size: 2.2rem;
       font-weight: 800;
+      font-family: var(--font-mono);
       color: var(--accent-cyan);
-      margin-top: 0.25rem;
+      margin-top: 0.35rem;
     }
     .stat-label {
       font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      font-family: var(--font-display);
+      font-weight: 700;
       color: var(--text-secondary);
     }
     .room-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+      gap: 1.75rem;
       margin-top: 1rem;
     }
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
       .room-actions { grid-template-columns: 1fr; }
     }
   </style>
@@ -49,40 +59,43 @@
   <header class="navbar">
     <a href="index.html" class="nav-brand">
       <span class="brand-icon">⚔️</span>
-      <span>CodeClash</span>
+      <span>Code<span class="brand-text-accent">Clash</span></span>
     </a>
     <nav class="nav-links" id="navLinks">
       <a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a>
-      <span id="userBadge" style="color: var(--accent-cyan); font-weight: 600;">Loading...</span>
-      <button onclick="handleLogout()" class="btn btn-outline" style="padding: 0.4rem 0.8rem;">Logout</button>
+      <span id="userBadge" style="color: var(--accent-cyan); font-family: var(--font-display); font-weight: 700;">Loading...</span>
+      <button onclick="handleLogout()" class="btn btn-outline" style="padding: 0.45rem 1rem;">Logout</button>
     </nav>
   </header>
 
   <main class="container">
-    <!-- Player Banner -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <!-- Player Hero Banner -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-medium); border-radius: var(--radius-xl); padding: 2rem; backdrop-filter: blur(16px);">
       <div>
-        <h1 id="welcomeHeading" style="font-size: 1.8rem; font-weight: 800;">Welcome, Player</h1>
-        <p style="color: var(--text-secondary); font-size: 0.95rem;">Ready for your next 1v1 battle?</p>
+        <div style="font-size: 0.85rem; font-family: var(--font-display); font-weight: 700; color: var(--accent-orange); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.25rem;">
+          ACTIVE DUELIST HUB
+        </div>
+        <h1 id="welcomeHeading" style="font-size: 2.2rem; font-weight: 900;">Welcome, Player</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.25rem;">Ready to challenge your next rival in the 1v1 Arena?</p>
       </div>
-      <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); padding: 0.5rem 1.25rem; border-radius: var(--radius-md);">
-        <span style="color: var(--text-secondary); font-size: 0.85rem;">Current Rating:</span>
-        <span id="playerElo" style="color: var(--accent-cyan); font-weight: 800; font-size: 1.2rem; margin-left: 0.4rem;">1200</span>
+      <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.35); padding: 0.85rem 1.75rem; border-radius: var(--radius-lg); text-align: right;">
+        <div style="color: var(--text-secondary); font-size: 0.8rem; font-family: var(--font-display); font-weight: 700; text-transform: uppercase;">Official Elo Rating</div>
+        <div id="playerElo" style="color: var(--accent-cyan); font-weight: 900; font-family: var(--font-mono); font-size: 1.8rem;">1200</div>
       </div>
     </div>
 
-    <!-- Stats Row -->
+    <!-- Stats Grid Row -->
     <div class="stats-row">
       <div class="stat-card">
-        <div class="stat-label">Matches</div>
+        <div class="stat-label">Matches Duelled</div>
         <div class="stat-val" id="statMatches">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Wins</div>
+        <div class="stat-label">Victories</div>
         <div class="stat-val" style="color: var(--accent-green);" id="statWins">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Losses</div>
+        <div class="stat-label">Defeats</div>
         <div class="stat-val" style="color: var(--accent-red);" id="statLosses">0</div>
       </div>
       <div class="stat-card">
@@ -91,32 +104,43 @@
       </div>
     </div>
 
-    <!-- Room Operations -->
+    <!-- Matchmaking Operations -->
     <div class="room-actions">
-      <div class="card">
-        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">🎮 Create a Private Room</h2>
-        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.25rem;">
-          Generate a 6-character room code and invite your opponent.
+      <!-- Create Room -->
+      <div class="card" style="border-color: rgba(249, 115, 22, 0.3);">
+        <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">🎮</div>
+        <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.4rem;">Create 1v1 Battle Lobby</h2>
+        <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 1.5rem; line-height: 1.5;">
+          Generate a 6-character room code, share with your challenger, and start when both players are ready.
         </p>
-        <button class="btn btn-primary" style="width: 100%;" id="createRoomBtn" onclick="handleCreateRoom()">
-          Create Room Lobby
+        <button class="btn btn-primary" style="width: 100%; padding: 0.85rem;" id="createRoomBtn" onclick="handleCreateRoom()">
+          ⚡ Create Room Lobby
         </button>
       </div>
 
-      <div class="card">
-        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">🚪 Join Existing Room</h2>
-        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
-          Enter the room code shared by your challenger.
+      <!-- Join Room -->
+      <div class="card" style="border-color: rgba(6, 182, 212, 0.3);">
+        <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">🚪</div>
+        <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.4rem;">Join Existing Room</h2>
+        <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 1.25rem; line-height: 1.5;">
+          Enter the 6-character room code shared by your opponent to connect into their lobby.
         </p>
-        <div style="display: flex; gap: 0.5rem;">
-          <input type="text" class="form-input" id="joinRoomCode" placeholder="e.g. CLASH-4821" style="text-transform: uppercase;">
-          <button class="btn btn-outline" id="joinRoomBtn" onclick="handleJoinRoom()">
+        <div style="display: flex; gap: 0.65rem;">
+          <input type="text" class="form-input" id="joinRoomCode" placeholder="e.g. CLASH-4821" style="text-transform: uppercase; font-family: var(--font-mono); font-weight: 700; letter-spacing: 1px;">
+          <button class="btn btn-outline" id="joinRoomBtn" onclick="handleJoinRoom()" style="padding: 0 1.5rem;">
             Join
           </button>
         </div>
       </div>
     </div>
   </main>
+
+  <footer>
+    <div class="footer-content">
+      <div>⚔️ CodeClash — 1v1 Competitive Coding Platform</div>
+      <div style="color: var(--text-muted); font-size: 0.85rem;">&copy; 2026 CodeClash</div>
+    </div>
+  </footer>
 
   <script src="js/api.js"></script>
   <script>
@@ -145,7 +169,7 @@
       } catch (err) {
         alert(err.message || 'Failed to create room');
         btn.disabled = false;
-        btn.innerText = 'Create Room Lobby';
+        btn.innerText = '⚡ Create Room Lobby';
       }
     }
 

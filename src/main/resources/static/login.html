@@ -7,24 +7,25 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header class="navbar">
     <a href="index.html" class="nav-brand">
       <span class="brand-icon">⚔️</span>
-      <span>CodeClash</span>
+      <span>Code<span class="brand-text-accent">Clash</span></span>
     </a>
     <nav class="nav-links">
-      <a href="register.html" class="btn btn-outline">Register</a>
+      <a href="register.html" class="btn btn-outline">Create Profile</a>
     </nav>
   </header>
 
-  <main class="container">
-    <div class="auth-wrapper">
+  <main class="container" style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 170px);">
+    <div class="auth-wrapper" style="width: 100%; max-width: 440px; margin: 0 auto;">
       <div class="auth-header">
-        <h2>Welcome Back</h2>
-        <p>Login to enter coding rooms and battle</p>
+        <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🤺</div>
+        <h2>Welcome Back, Duelist</h2>
+        <p>Login to enter coding lobbies and climb the ladder</p>
       </div>
 
       <div id="alertBox" class="alert"></div>
@@ -32,7 +33,7 @@
       <form id="loginForm">
         <div class="form-group">
           <label class="form-label" for="usernameOrEmail">Username or Email</label>
-          <input type="text" id="usernameOrEmail" class="form-input" placeholder="e.g. coder123" required autocomplete="username">
+          <input type="text" id="usernameOrEmail" class="form-input" placeholder="e.g. byte_master" required autocomplete="username">
         </div>
 
         <div class="form-group">
@@ -40,16 +41,23 @@
           <input type="password" id="password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
         </div>
 
-        <button type="submit" class="btn btn-primary" id="submitBtn" style="width: 100%; margin-top: 0.5rem;">
-          Enter Arena
+        <button type="submit" class="btn btn-primary" id="submitBtn" style="width: 100%; margin-top: 0.75rem; padding: 0.85rem;">
+          ⚔️ Enter Battle Arena
         </button>
       </form>
 
-      <p style="text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-secondary);">
-        Don't have an account? <a href="register.html" style="color: var(--accent-cyan); text-decoration: none; font-weight: 600;">Create one</a>
+      <p style="text-align: center; margin-top: 1.75rem; font-size: 0.88rem; color: var(--text-secondary);">
+        New to CodeClash? <a href="register.html" style="color: var(--accent-cyan); text-decoration: none; font-weight: 700; font-family: var(--font-display);">Register your profile</a>
       </p>
     </div>
   </main>
+
+  <footer>
+    <div class="footer-content">
+      <div>⚔️ CodeClash — 1v1 Competitive Coding Platform</div>
+      <div style="color: var(--text-muted); font-size: 0.85rem;">&copy; 2026 CodeClash</div>
+    </div>
+  </footer>
 
   <script src="js/api.js"></script>
   <script>
@@ -70,14 +78,14 @@
         const response = await API.login(usernameOrEmail, password);
         if (response.success) {
           alertBox.className = 'alert alert-success';
-          alertBox.innerText = 'Login successful! Redirecting...';
+          alertBox.innerText = '✓ Login successful! Entering the arena...';
           alertBox.style.display = 'block';
           setTimeout(() => {
             window.location.href = 'dashboard.html';
-          }, 800);
+          }, 600);
         } else {
           alertBox.className = 'alert alert-error';
-          alertBox.innerText = response.message || 'Login failed';
+          alertBox.innerText = response.message || 'Invalid credentials';
           alertBox.style.display = 'block';
         }
       } catch (err) {
@@ -86,7 +94,7 @@
         alertBox.style.display = 'block';
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerText = 'Enter Arena';
+        submitBtn.innerText = '⚔️ Enter Battle Arena';
       }
     });
   </script>
