@@ -14,7 +14,7 @@
   --bg-card: rgba(19, 25, 38, 0.75);
   --bg-card-hover: rgba(28, 36, 54, 0.85);
   --bg-input: #090c13;
-  --bg-glass: rgba(13, 17, 26, 0.75);
+  --bg-glass: rgba(13, 17, 26, 0.85);
 
   /* Core Accent Colors */
   --accent-cyan: #06b6d4;
@@ -35,9 +35,9 @@
   --text-dim: #475569;
 
   /* Borders & Shadows */
-  --border-subtle: rgba(255, 255, 255, 0.07);
-  --border-medium: rgba(255, 255, 255, 0.12);
-  --border-accent: rgba(99, 102, 241, 0.3);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.14);
+  --border-accent: rgba(99, 102, 241, 0.35);
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
@@ -92,6 +92,54 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.025em;
   font-weight: 700;
   color: var(--text-primary);
+}
+
+/* ==========================================================================
+   Top Scrolling Quote Marquee Ticker (Above Navbar)
+   ========================================================================== */
+.quote-ticker-bar {
+  background: #07090e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.5rem 0;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  position: relative;
+  z-index: 101;
+  display: flex;
+}
+
+.quote-ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: quote-marquee 50s linear infinite;
+  will-change: transform;
+}
+
+.quote-ticker-track:hover {
+  animation-play-state: paused;
+}
+
+.quote-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.4px;
+  color: #cbd5e1;
+  padding: 0 1.75rem;
+}
+
+.quote-prefix-cyan { color: var(--accent-cyan); font-weight: 700; }
+.quote-prefix-orange { color: var(--accent-orange); font-weight: 700; }
+.quote-author-cyan { color: #38bdf8; font-weight: 700; }
+.quote-author-orange { color: #fb923c; font-weight: 700; }
+.quote-divider { color: var(--text-muted); opacity: 0.6; }
+
+@keyframes quote-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* Navbar */
@@ -174,6 +222,20 @@ h1, h2, h3, h4, h5, h6 {
 
 .nav-link:hover::after {
   width: 100%;
+}
+
+.nav-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.8rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #34d399;
 }
 
 /* Buttons */
@@ -382,39 +444,6 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 1.25rem;
   box-shadow: 0 0 25px var(--accent-orange-glow);
   margin: 0 auto;
-}
-
-/* Activity Ticker Bar */
-.ticker-wrapper {
-  background: rgba(19, 25, 38, 0.7);
-  border-top: 1px solid var(--border-subtle);
-  border-bottom: 1px solid var(--border-subtle);
-  padding: 0.85rem 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  overflow: hidden;
-  backdrop-filter: blur(12px);
-}
-
-.ticker-badge {
-  background: rgba(249, 115, 22, 0.15);
-  color: var(--accent-orange);
-  border: 1px solid rgba(249, 115, 22, 0.3);
-  padding: 0.2rem 0.65rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.75rem;
-  font-weight: 800;
-  font-family: var(--font-display);
-  white-space: nowrap;
-}
-
-.ticker-content {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  font-family: var(--font-mono);
-  white-space: nowrap;
-  animation: ticker-slide 25s linear infinite;
 }
 
 /* Cards & Grid System */
@@ -654,15 +683,11 @@ footer {
   50% { transform: translateY(-8px); }
 }
 
-@keyframes ticker-slide {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
 /* Responsive Breakpoints */
 @media (max-width: 768px) {
   .navbar { padding: 1rem 1.25rem; }
   .container { padding: 2rem 1rem; }
   .hero-title { font-size: 2.25rem; }
   .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .quote-item { font-size: 0.75rem; padding: 0 1rem; }
 }

@@ -76,29 +76,55 @@
   </style>
 </head>
 <body>
-  <!-- Top Navigation -->
-  <header class="navbar">
-    <a href="index.html" class="nav-brand">
-      <span class="brand-icon">⚔️</span>
-      <span>Code<span class="brand-text-accent">Clash</span></span>
-    </a>
-    <nav class="nav-links" id="navLinks">
-      <a href="#how-it-works" class="nav-link">How It Works</a>
-      <a href="#features" class="nav-link">Features</a>
-      <a href="#challenges" class="nav-link">Challenges</a>
-      <a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a>
-      <a href="login.html" class="btn btn-outline" id="loginBtn">Login</a>
-      <a href="register.html" class="btn btn-primary" id="registerBtn">Register</a>
-    </nav>
-  </header>
+  <!-- Top Continuous Scrolling Quote Ticker -->
+  <div class="quote-ticker-bar">
+    <div class="quote-ticker-track">
+      <!-- Quote Set 1 -->
+      <span class="quote-item"><span class="quote-prefix-cyan">//</span> &ldquo;Talk is cheap. Show me the code.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-cyan">Linus Torvalds</span></span>
+      <span class="quote-item"><span class="quote-prefix-orange">//</span> &ldquo;First, solve the problem. Then, write the code.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-orange">John Johnson</span></span>
+      <span class="quote-item"><span class="quote-prefix-cyan">//</span> &ldquo;Code is like humor. When you have to explain it, it's bad.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-cyan">Cory House</span></span>
+      <span class="quote-item"><span class="quote-prefix-orange">//</span> &ldquo;The best error message is the one that never shows up.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-orange">Thomas Fuchs</span></span>
+      <span class="quote-item"><span class="quote-prefix-cyan">//</span> &ldquo;Programs must be written for people to read, and only incidentally for machines to execute.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-cyan">Harold Abelson</span></span>
+      <span class="quote-item"><span class="quote-prefix-orange">//</span> &ldquo;Simplicity is the soul of efficiency.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-orange">Austin Freeman</span></span>
+      <span class="quote-item"><span class="quote-prefix-cyan">//</span> &ldquo;Make it work, make it right, make it fast.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-cyan">Kent Beck</span></span>
+      <span class="quote-item"><span class="quote-prefix-orange">//</span> &ldquo;The only way to learn a new programming language is by writing programs in it.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-orange">Dennis Ritchie</span></span>
+      <span class="quote-item"><span class="quote-prefix-cyan">//</span> &ldquo;Every great developer you know got there by solving problems they were unqualified to solve.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-cyan">Patrick McKenzie</span></span>
+      <span class="quote-item"><span class="quote-prefix-orange">//</span> &ldquo;In the middle of difficulty lies opportunity.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-orange">Albert Einstein</span></span>
 
-  <!-- Live Activity Ticker -->
-  <div class="ticker-wrapper">
-    <div class="ticker-badge">⚡ LIVE RADAR</div>
-    <div class="ticker-content" id="tickerMsg">
-      ⚔️ No active duel in progress right now — It could be you and your friend! Create a private room to ignite the battle &bull; Chess-style Elo Rating System (K=32) Active &bull; Real-time Sandboxed Java Judge Engine &bull; Instant 1v1 Matchmaking
+      <!-- Quote Set 2 (Exact Duplicate for Seamless Loop) -->
+      <span class="quote-item"><span class="quote-prefix-cyan">//</span> &ldquo;Talk is cheap. Show me the code.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-cyan">Linus Torvalds</span></span>
+      <span class="quote-item"><span class="quote-prefix-orange">//</span> &ldquo;First, solve the problem. Then, write the code.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-orange">John Johnson</span></span>
+      <span class="quote-item"><span class="quote-prefix-cyan">//</span> &ldquo;Code is like humor. When you have to explain it, it's bad.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-cyan">Cory House</span></span>
+      <span class="quote-item"><span class="quote-prefix-orange">//</span> &ldquo;The best error message is the one that never shows up.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-orange">Thomas Fuchs</span></span>
+      <span class="quote-item"><span class="quote-prefix-cyan">//</span> &ldquo;Programs must be written for people to read, and only incidentally for machines to execute.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-cyan">Harold Abelson</span></span>
+      <span class="quote-item"><span class="quote-prefix-orange">//</span> &ldquo;Simplicity is the soul of efficiency.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-orange">Austin Freeman</span></span>
+      <span class="quote-item"><span class="quote-prefix-cyan">//</span> &ldquo;Make it work, make it right, make it fast.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-cyan">Kent Beck</span></span>
+      <span class="quote-item"><span class="quote-prefix-orange">//</span> &ldquo;The only way to learn a new programming language is by writing programs in it.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-orange">Dennis Ritchie</span></span>
+      <span class="quote-item"><span class="quote-prefix-cyan">//</span> &ldquo;Every great developer you know got there by solving problems they were unqualified to solve.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-cyan">Patrick McKenzie</span></span>
+      <span class="quote-item"><span class="quote-prefix-orange">//</span> &ldquo;In the middle of difficulty lies opportunity.&rdquo; <span class="quote-divider">&mdash;</span> <span class="quote-author-orange">Albert Einstein</span></span>
     </div>
   </div>
+
+  <!-- Top Navigation -->
+  <header class="navbar">
+    <div style="display: flex; align-items: center; gap: 2rem;">
+      <a href="index.html" class="nav-brand">
+        <span class="brand-icon">⚔️</span>
+        <span>Code<span class="brand-text-accent">Clash</span></span>
+      </a>
+      <div style="display: flex; align-items: center; gap: 1.25rem;">
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+        <a href="#challenges" class="nav-link">Challenges</a>
+        <a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a>
+      </div>
+    </div>
+
+    <nav class="nav-links" id="navLinks">
+      <span class="nav-status-pill">🟢 Cloud Judge Online</span>
+      <a href="login.html" class="btn btn-outline" id="loginBtn">Login</a>
+      <a href="register.html" class="btn btn-primary" id="registerBtn">Create Profile</a>
+    </nav>
+  </header>
 
   <main class="container">
     <!-- Hero Section -->
@@ -357,9 +383,7 @@
         if (user && user.username) {
           const navLinks = document.getElementById('navLinks');
           navLinks.innerHTML = `
-            <a href="#how-it-works" class="nav-link">How It Works</a>
-            <a href="#challenges" class="nav-link">Challenges</a>
-            <a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a>
+            <span class="nav-status-pill">🟢 In Battle Arena</span>
             <span style="color: var(--accent-cyan); font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;">👤 ${user.username} (${user.rating} Elo)</span>
             <a href="dashboard.html" class="btn btn-primary" style="padding: 0.5rem 1.2rem;">Dashboard</a>
             <button onclick="handleLogout()" class="btn btn-outline" style="padding: 0.5rem 1rem;">Logout</button>

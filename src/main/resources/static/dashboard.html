@@ -56,14 +56,22 @@
   </style>
 </head>
 <body>
+  <!-- Top Navigation with Balanced Layout -->
   <header class="navbar">
-    <a href="index.html" class="nav-brand">
-      <span class="brand-icon">⚔️</span>
-      <span>Code<span class="brand-text-accent">Clash</span></span>
-    </a>
+    <div style="display: flex; align-items: center; gap: 2rem;">
+      <a href="index.html" class="nav-brand">
+        <span class="brand-icon">⚔️</span>
+        <span>Code<span class="brand-text-accent">Clash</span></span>
+      </a>
+      <div style="display: flex; align-items: center; gap: 1.25rem;">
+        <a href="index.html#challenges" class="nav-link">Challenges</a>
+        <a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a>
+      </div>
+    </div>
+
     <nav class="nav-links" id="navLinks">
-      <a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a>
-      <span id="userBadge" style="color: var(--accent-cyan); font-family: var(--font-display); font-weight: 700;">Loading...</span>
+      <span class="nav-status-pill">🟢 Battle Engine Online</span>
+      <span id="userBadge" style="color: var(--accent-cyan); font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;">Loading...</span>
       <button onclick="handleLogout()" class="btn btn-outline" style="padding: 0.45rem 1rem;">Logout</button>
     </nav>
   </header>
