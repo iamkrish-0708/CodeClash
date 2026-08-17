@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -24,8 +25,62 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
+        String twoSumBoilerplate = 
+            "import java.util.*;\n\n" +
+            "public class Solution {\n" +
+            "    public static void main(String[] args) {\n" +
+            "        Scanner sc = new Scanner(System.in);\n" +
+            "        if (!sc.hasNextInt()) return;\n" +
+            "        int n = sc.nextInt();\n" +
+            "        int[] nums = new int[n];\n" +
+            "        for (int i = 0; i < n; i++) {\n" +
+            "            nums[i] = sc.nextInt();\n" +
+            "        }\n" +
+            "        int target = sc.nextInt();\n\n" +
+            "        // TODO: Write your solution logic here\n" +
+            "        // Print the two 0-based indices separated by a space (e.g. \"0 1\")\n" +
+            "        \n" +
+            "    }\n" +
+            "}";
+
+        String palindromeBoilerplate = 
+            "import java.util.*;\n\n" +
+            "public class Solution {\n" +
+            "    public static void main(String[] args) {\n" +
+            "        Scanner sc = new Scanner(System.in);\n" +
+            "        if (!sc.hasNext()) return;\n" +
+            "        String s = sc.next().trim();\n\n" +
+            "        // TODO: Write your solution logic here\n" +
+            "        // Print \"true\" if s is a palindrome, or \"false\" otherwise\n" +
+            "        \n" +
+            "    }\n" +
+            "}";
+
+        String parenthesesBoilerplate = 
+            "import java.util.*;\n\n" +
+            "public class Solution {\n" +
+            "    public static void main(String[] args) {\n" +
+            "        Scanner sc = new Scanner(System.in);\n" +
+            "        if (!sc.hasNext()) return;\n" +
+            "        String s = sc.next().trim();\n\n" +
+            "        // TODO: Write your solution logic here\n" +
+            "        // Print \"true\" if the string parentheses are valid, or \"false\" otherwise\n" +
+            "        \n" +
+            "    }\n" +
+            "}";
+
         if (problemRepository.count() > 0) {
-            log.info("Problems already seeded in database.");
+            log.info("Updating existing problem starter codes to clean boilerplate templates...");
+            Optional<Problem> p1 = problemRepository.findBySlug("two-sum");
+            p1.ifPresent(p -> { p.setStarterCodeJava(twoSumBoilerplate); problemRepository.save(p); });
+
+            Optional<Problem> p2 = problemRepository.findBySlug("palindrome-number");
+            p2.ifPresent(p -> { p.setStarterCodeJava(palindromeBoilerplate); problemRepository.save(p); });
+
+            Optional<Problem> p3 = problemRepository.findBySlug("valid-parentheses");
+            p3.ifPresent(p -> { p.setStarterCodeJava(parenthesesBoilerplate); problemRepository.save(p); });
+
+            log.info("Starter code templates updated successfully.");
             return;
         }
 
@@ -46,7 +101,7 @@ public class DataInitializer implements CommandLineRunner {
                         "Third line contains single integer `target`.\n\n" +
                         "**Output Format:**\n" +
                         "Print the two 0-based indices separated by a space (e.g. `0 1`).")
-                .starterCodeJava("import java.util.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int n = sc.nextInt();\n        int[] nums = new int[n];\n        for (int i = 0; i < n; i++) nums[i] = sc.nextInt();\n        int target = sc.nextInt();\n        \n        // Write your solution here\n        for (int i = 0; i < n; i++) {\n            for (int j = i + 1; j < n; j++) {\n                if (nums[i] + nums[j] == target) {\n                    System.out.println(i + \" \" + j);\n                    return;\n                }\n            }\n        }\n    }\n}")
+                .starterCodeJava(twoSumBoilerplate)
                 .build();
 
         twoSum.addTestCase(TestCase.builder().inputData("4\n2 7 11 15\n9").expectedOutput("0 1").isHidden(false).orderIndex(1).build());
@@ -67,7 +122,7 @@ public class DataInitializer implements CommandLineRunner {
                         "A single integer `x`.\n\n" +
                         "**Output Format:**\n" +
                         "`true` or `false`")
-                .starterCodeJava("import java.util.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNext()) return;\n        String s = sc.next().trim();\n        \n        // Write your solution here\n        String rev = new StringBuilder(s).reverse().toString();\n        System.out.println(s.equals(rev) ? \"true\" : \"false\");\n    }\n}")
+                .starterCodeJava(palindromeBoilerplate)
                 .build();
 
         palindrome.addTestCase(TestCase.builder().inputData("121").expectedOutput("true").isHidden(false).orderIndex(1).build());
@@ -88,7 +143,7 @@ public class DataInitializer implements CommandLineRunner {
                         "A single string `s`.\n\n" +
                         "**Output Format:**\n" +
                         "`true` or `false`")
-                .starterCodeJava("import java.util.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNext()) return;\n        String s = sc.next().trim();\n        \n        // Write your solution here\n        Stack<Character> stack = new Stack<>();\n        boolean valid = true;\n        for (char c : s.toCharArray()) {\n            if (c == '(' || c == '{' || c == '[') stack.push(c);\n            else {\n                if (stack.isEmpty()) { valid = false; break; }\n                char top = stack.pop();\n                if (c == ')' && top != '(') { valid = false; break; }\n                if (c == '}' && top != '{') { valid = false; break; }\n                if (c == ']' && top != '[') { valid = false; break; }\n            }\n        }\n        if (!stack.isEmpty()) valid = false;\n        System.out.println(valid ? \"true\" : \"false\");\n    }\n}")
+                .starterCodeJava(parenthesesBoilerplate)
                 .build();
 
         validParentheses.addTestCase(TestCase.builder().inputData("()[]{}").expectedOutput("true").isHidden(false).orderIndex(1).build());
@@ -97,6 +152,6 @@ public class DataInitializer implements CommandLineRunner {
         validParentheses.addTestCase(TestCase.builder().inputData("(((").expectedOutput("false").isHidden(true).orderIndex(4).build());
 
         problemRepository.saveAll(List.of(twoSum, palindrome, validParentheses));
-        log.info("Initial problems seeded successfully.");
+        log.info("Initial problems seeded successfully with clean boilerplate.");
     }
 }

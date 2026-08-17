@@ -5,8 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import java.util.Optional;
+
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -14,6 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
-    Page<User> findAllByOrderByRatingDesc(Pageable pageable);
-    List<User> findTop10ByOrderByRatingDesc();
+
+    // Leaderboard query: Only users with matchesPlayed > minMatches, ordered by rating DESC, then createdAt ASC (tie-breaker)
+    Page<User> findByMatchesPlayedGreaterThanOrderByRatingDescCreatedAtAsc(int minMatches, Pageable pageable);
+    List<User> findTop10ByMatchesPlayedGreaterThanOrderByRatingDescCreatedAtAsc(int minMatches);
 }

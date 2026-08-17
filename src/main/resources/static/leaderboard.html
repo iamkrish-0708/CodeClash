@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leaderboard — CodeClash</title>
+  <title>Global Leaderboard — CodeClash</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -65,8 +65,8 @@
 
   <main class="container">
     <div style="text-align: center; margin-bottom: 2rem;">
-      <h1 style="font-size: 2.2rem; font-weight: 900;">🏆 Local Network Leaderboard</h1>
-      <p style="color: var(--text-secondary); font-size: 0.95rem;">Live Chess-style Elo rankings for all registered duelists</p>
+      <h1 style="font-size: 2.2rem; font-weight: 900;">🏆 Global Leaderboard</h1>
+      <p style="color: var(--text-secondary); font-size: 0.95rem;">Overall Elo rankings for active duelists (Ranked by Elo, tied by join date)</p>
     </div>
 
     <table class="leaderboard-table">
@@ -99,7 +99,15 @@
         const users = page.content || [];
 
         if (users.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-muted);">No players registered yet!</td></tr>`;
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align:center; padding:3rem 1rem; color:var(--text-muted);">
+                <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">⚔️</div>
+                <div style="font-size: 1.05rem; font-weight: 600; color: var(--text-secondary);">No active duelists yet!</div>
+                <div style="font-size: 0.85rem; margin-top: 0.25rem;">Play at least 1 match in the Arena to earn your rank on the leaderboard.</div>
+              </td>
+            </tr>
+          `;
           return;
         }
 

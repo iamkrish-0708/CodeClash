@@ -24,12 +24,14 @@ public class LeaderboardController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
-        Page<User> leaderboard = userRepository.findAllByOrderByRatingDesc(PageRequest.of(page, size));
+        // Only return players who have played at least 1 match (matchesPlayed > 0)
+        // Ordered by rating DESC, then createdAt ASC (earlier registered user wins tie-breaker)
+        Page<User> leaderboard = userRepository.findByMatchesPlayedGreaterThanOrderByRatingDescCreatedAtAsc(0, PageRequest.of(page, size));
         return ResponseEntity.ok(leaderboard);
     }
 
     @GetMapping("/top")
     public ResponseEntity<List<User>> getTop10() {
-        return ResponseEntity.ok(userRepository.findTop10ByOrderByRatingDesc());
+        return ResponseEntity.ok(userRepository.findTop10ByMatchesPlayedGreaterThanOrderByRatingDescCreatedAtAsc(0));
     }
 }
