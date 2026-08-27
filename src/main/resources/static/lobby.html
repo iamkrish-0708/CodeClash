@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Battle Lobby — CodeClash</title>
-  <link rel="stylesheet" href="css/style.css?v=3">
+  <link rel="stylesheet" href="css/style.css?v=4">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     .lobby-wrapper {
-      max-width: 780px;
+      max-width: 820px;
       margin: 2rem auto;
       text-align: center;
     }
@@ -40,7 +40,7 @@
       align-items: center;
       margin-bottom: 2.5rem;
     }
-    @media (max-width: 640px) {
+    @media (max-width: 680px) {
       .versus-container { grid-template-columns: 1fr; }
     }
     .player-card {
@@ -50,80 +50,23 @@
       padding: 2.25rem 1.5rem;
       box-shadow: var(--shadow-md);
       backdrop-filter: blur(14px);
-    }
-    .vs-circle {
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, #f97316, #ef4444);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-display);
-      font-weight: 900;
-      color: #fff;
-      font-size: 1.25rem;
-      box-shadow: 0 0 25px var(--accent-orange-glow);
-      margin: 0 auto;
+      transition: all 0.3s ease;
     }
   </style>
 </head>
 <body>
-  <!-- Top Navigation with Pixel Swordsmen Duel Animation -->
+  <!-- Top Navigation with Option 4: Digital Matrix / Binary Code Clash -->
   <header class="navbar">
     <a href="dashboard.html" class="nav-brand">
       <span class="brand-icon">⚔️</span>
       <span>Code<span class="brand-text-accent">Clash</span></span>
     </a>
 
-    <!-- Retro Pixel Swordsmen Clash Track -->
-    <div class="swordsmen-track">
-      <div class="arena-ground-line"></div>
-      
-      <!-- Left Swordsman (Cyan Duelist) -->
-      <div class="swordsman-runner swordsman-left">
-        <svg class="pixel-knight-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Helmet -->
-          <rect x="6" y="2" width="8" height="6" fill="#38bdf8" />
-          <rect x="10" y="4" width="4" height="2" fill="#0f172a" />
-          <!-- Armor Body -->
-          <rect x="5" y="8" width="10" height="8" fill="#0284c7" />
-          <!-- Sword pointing right -->
-          <rect x="14" y="9" width="8" height="2" fill="#ffffff" />
-          <rect x="13" y="8" width="2" height="4" fill="#facc15" />
-          <!-- Running legs -->
-          <rect x="6" y="16" width="3" height="6" fill="#0369a1" />
-          <rect x="11" y="16" width="3" height="6" fill="#0369a1" />
-        </svg>
-      </div>
-
-      <!-- Center Clash Impact: Sparks + Dust Clouds -->
-      <div class="clash-impact-center">
-        <div class="clash-spark-star"></div>
-        <div class="clash-spark-dot spark-p1"></div>
-        <div class="clash-spark-dot spark-p2"></div>
-        <div class="clash-spark-dot spark-p3"></div>
-        <div class="clash-spark-dot spark-p4"></div>
-        <div class="clash-dust-puff dust-left"></div>
-        <div class="clash-dust-puff dust-right"></div>
-      </div>
-
-      <!-- Right Swordsman (Orange/Red Duelist) -->
-      <div class="swordsman-runner swordsman-right">
-        <svg class="pixel-knight-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Helmet -->
-          <rect x="6" y="2" width="8" height="6" fill="#fb923c" />
-          <rect x="10" y="4" width="4" height="2" fill="#0f172a" />
-          <!-- Armor Body -->
-          <rect x="5" y="8" width="10" height="8" fill="#ea580c" />
-          <!-- Sword pointing right (mirrored to left) -->
-          <rect x="14" y="9" width="8" height="2" fill="#ffffff" />
-          <rect x="13" y="8" width="2" height="4" fill="#facc15" />
-          <!-- Running legs -->
-          <rect x="6" y="16" width="3" height="6" fill="#c2410c" />
-          <rect x="11" y="16" width="3" height="6" fill="#c2410c" />
-        </svg>
-      </div>
+    <!-- Option 4: Binary Stream Clash in Navbar -->
+    <div class="binary-matrix-track">
+      <div class="binary-stream-left">1 0 1 1 0 1 0 0 1</div>
+      <div class="matrix-clash-core">⚔️</div>
+      <div class="binary-stream-right">0 1 1 0 1 0 1 1 0</div>
     </div>
 
     <nav class="nav-links">
@@ -151,16 +94,21 @@
         </button>
       </div>
 
-      <!-- Versus Cards -->
+      <!-- Versus Cards with Option 3: Supercharged Central VS Sphere & Orbitals -->
       <div class="versus-container">
         <!-- Host Card -->
-        <div class="player-card" style="border-color: rgba(245, 158, 11, 0.3);">
+        <div class="player-card" style="border-color: rgba(245, 158, 11, 0.35); box-shadow: 0 0 25px rgba(245, 158, 11, 0.1);">
           <div style="font-size: 3rem; margin-bottom: 0.5rem;">👑</div>
           <h3 id="hostName" style="font-size: 1.35rem; font-weight: 800;">Host</h3>
           <span class="badge badge-easy" style="margin-top: 0.65rem;" id="hostRating">1200 Elo</span>
         </div>
 
-        <div class="vs-circle">VS</div>
+        <!-- Option 3: Supercharged VS Energy Sphere -->
+        <div class="vs-container-animated">
+          <div class="vs-energy-orbit"></div>
+          <div class="vs-energy-orbit-cyan"></div>
+          <div class="vs-circle-supercharged">VS</div>
+        </div>
 
         <!-- Guest Card -->
         <div class="player-card" id="guestCard" style="border-color: rgba(99, 102, 241, 0.3);">
@@ -170,14 +118,23 @@
         </div>
       </div>
 
-      <!-- Controls -->
+      <!-- Option 2: Live Radar Scanning HUD & Smart Duel Controls -->
       <div id="controlsArea">
-        <button class="btn btn-primary" id="startMatchBtn" disabled style="padding: 0.95rem 3rem; font-size: 1.15rem; opacity: 0.5;" onclick="handleStartMatch()">
-          ⚔️ Start 1v1 Duel
-        </button>
-        <p id="statusMsg" style="margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">
-          Waiting for an opponent to join before the match can begin...
-        </p>
+        <!-- Radar Scanning HUD (Rendered when 1 player is waiting) -->
+        <div class="radar-hud-box" id="radarScanningBox">
+          <div class="radar-dish-wrapper">
+            <div class="radar-ring"></div>
+            <div class="radar-sweep-beam"></div>
+            <div class="radar-blip-dot"></div>
+          </div>
+          <div class="radar-telemetry-text">
+            <div style="color: var(--accent-cyan); font-weight: 800; font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 0.2rem;">
+              [RADAR] 📡 Scanning for Challenger...
+            </div>
+            <div>Waiting for rival to connect with code <strong id="radarRoomCode" style="color: var(--accent-orange);">CLASH-....</strong></div>
+            <div style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.25rem;">// Standard 1v1 Ranked Rules (K=32) • Java 21 Arena Ready</div>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -203,6 +160,8 @@
     }
 
     document.getElementById('roomCodeDisplay').innerText = roomCode;
+    const radarCodeEl = document.getElementById('radarRoomCode');
+    if (radarCodeEl) radarCodeEl.innerText = roomCode;
 
     async function init() {
       try {
@@ -224,24 +183,57 @@
         document.getElementById('hostName').innerText = room.hostUsername;
         document.getElementById('hostRating').innerText = `${room.hostRating} Elo`;
 
-        // Update Guest
+        // Update Guest & Matchmaking Controls
+        const controlsArea = document.getElementById('controlsArea');
         if (room.guestUserId) {
           document.getElementById('guestIcon').innerText = '🤺';
           document.getElementById('guestName').innerText = room.guestUsername;
           document.getElementById('guestName').style.color = 'var(--text-primary)';
           document.getElementById('guestRating').innerText = `${room.guestRating} Elo`;
           document.getElementById('guestRating').className = 'badge badge-medium';
+          document.getElementById('guestCard').style.borderColor = 'rgba(6, 182, 212, 0.4)';
+          document.getElementById('guestCard').style.boxShadow = '0 0 25px rgba(6, 182, 212, 0.15)';
 
           if (isHost) {
-            const startBtn = document.getElementById('startMatchBtn');
-            startBtn.disabled = false;
-            startBtn.style.opacity = '1';
-            document.getElementById('statusMsg').innerText = '✓ Challenger has joined! Click Start to begin the duel.';
-            document.getElementById('statusMsg').style.color = 'var(--accent-green)';
+            controlsArea.innerHTML = `
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem;">
+                <button class="btn btn-primary" id="startMatchBtn" style="padding: 1rem 3.5rem; font-size: 1.2rem; box-shadow: 0 0 35px var(--accent-orange-glow);" onclick="handleStartMatch()">
+                  ⚔️ Start 1v1 Duel
+                </button>
+                <div style="color: var(--accent-green); font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;">
+                  ✓ Challenger ${room.guestUsername} is locked & ready! Click to begin the match.
+                </div>
+              </div>
+            `;
           } else {
-            document.getElementById('controlsArea').innerHTML = `
-              <div style="color: var(--accent-cyan); font-family: var(--font-display); font-weight: 700; font-size: 1.15rem;">
-                🎮 In Lobby! Waiting for host ${room.hostUsername} to launch the duel...
+            controlsArea.innerHTML = `
+              <div style="background: var(--bg-card); border: 1px solid rgba(6, 182, 212, 0.35); padding: 1.25rem 2rem; border-radius: var(--radius-xl); display: inline-block;">
+                <div style="color: var(--accent-cyan); font-family: var(--font-display); font-weight: 800; font-size: 1.15rem;">
+                  🎮 Challenger Connected!
+                </div>
+                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.3rem;">
+                  Waiting for host <strong>${room.hostUsername}</strong> to launch the duel...
+                </div>
+              </div>
+            `;
+          }
+        } else {
+          // Only 1 player in the room — Keep Radar Scanning HUD
+          if (!document.getElementById('radarScanningBox')) {
+            controlsArea.innerHTML = `
+              <div class="radar-hud-box" id="radarScanningBox">
+                <div class="radar-dish-wrapper">
+                  <div class="radar-ring"></div>
+                  <div class="radar-sweep-beam"></div>
+                  <div class="radar-blip-dot"></div>
+                </div>
+                <div class="radar-telemetry-text">
+                  <div style="color: var(--accent-cyan); font-weight: 800; font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 0.2rem;">
+                    [RADAR] 📡 Scanning for Challenger...
+                  </div>
+                  <div>Waiting for rival to connect with code <strong style="color: var(--accent-orange);">${roomCode}</strong></div>
+                  <div style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.25rem;">// Standard 1v1 Ranked Rules (K=32) • Java 21 Arena Ready</div>
+                </div>
               </div>
             `;
           }
@@ -259,16 +251,20 @@
 
     async function handleStartMatch() {
       const btn = document.getElementById('startMatchBtn');
-      btn.disabled = true;
-      btn.innerText = '🚀 Launching Duel...';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = '🚀 Launching Duel...';
+      }
       try {
         const match = await API.startMatch(roomId);
         clearInterval(pollInterval);
         window.location.href = `arena.html?matchId=${match.matchId}&problemId=${match.problemId}`;
       } catch (err) {
         alert(err.message || 'Failed to start match');
-        btn.disabled = false;
-        btn.innerText = '⚔️ Start 1v1 Duel';
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = '⚔️ Start 1v1 Duel';
+        }
       }
     }
 

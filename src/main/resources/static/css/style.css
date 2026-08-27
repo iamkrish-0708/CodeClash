@@ -112,7 +112,7 @@ h1, h2, h3, h4, h5, h6 {
 .quote-ticker-track {
   display: inline-flex;
   white-space: nowrap;
-  animation: quote-marquee 115s linear infinite; /* Smooth, relaxed reading pace */
+  animation: quote-marquee 115s linear infinite;
   will-change: transform;
 }
 
@@ -245,7 +245,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ==========================================================================
-   Pacman Track Component
+   Pacman Track Component (Other Pages)
    ========================================================================== */
 .pacman-track {
   flex: 1;
@@ -292,7 +292,6 @@ h1, h2, h3, h4, h5, h6 {
   animation: pulse-dot 1.2s infinite;
 }
 
-/* Pacman Runner traversing left to right */
 .pacman-squad-runner {
   position: absolute;
   top: 50%;
@@ -409,150 +408,228 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: rotate(35deg); }
 }
 
-@media (max-width: 960px) {
-  .pacman-track { display: none; }
-}
-
 /* ==========================================================================
-   Pixel Swordsmen Dueling Track (Lobby Page Navbar)
+   Option 4: Digital Matrix / Binary Code Clash (Navbar Track for Lobby)
    ========================================================================== */
-.swordsmen-track {
+.binary-matrix-track {
   flex: 1;
-  max-width: 420px;
-  height: 32px;
+  max-width: 400px;
+  height: 30px;
   margin: 0 1.5rem;
-  background: rgba(9, 12, 19, 0.9);
-  border: 1px solid rgba(249, 115, 22, 0.3);
+  background: rgba(9, 12, 19, 0.92);
+  border: 1px solid rgba(6, 182, 212, 0.3);
   border-radius: var(--radius-pill);
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
-  box-shadow: inset 0 2px 8px rgba(0,0,0,0.7), 0 0 15px rgba(249, 115, 22, 0.15);
+  justify-content: space-between;
+  padding: 0 10px;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.7), 0 0 15px rgba(6, 182, 212, 0.15);
 }
 
-.arena-ground-line {
-  position: absolute;
-  bottom: 5px;
-  left: 10px;
-  right: 10px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.3) 20%, rgba(249, 115, 22, 0.4) 50%, rgba(239, 68, 68, 0.3) 80%, transparent);
+.binary-stream-left {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  letter-spacing: 2px;
+  white-space: nowrap;
+  animation: binary-slide-left 4s linear infinite;
+  text-shadow: 0 0 8px rgba(6, 182, 212, 0.6);
 }
 
-/* Swordsman Base */
-.swordsman-runner {
-  position: absolute;
-  bottom: 4px;
-  width: 26px;
-  height: 24px;
-  display: flex;
-  align-items: flex-end;
-  will-change: transform, left, right;
+.binary-stream-right {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--accent-orange);
+  letter-spacing: 2px;
+  white-space: nowrap;
+  animation: binary-slide-right 4s linear infinite;
+  text-shadow: 0 0 8px rgba(249, 115, 22, 0.6);
 }
 
-/* Left Swordsman (Blue/Cyan Duelist) */
-.swordsman-left {
-  animation: sword-run-left 3.6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-}
-
-/* Right Swordsman (Red/Orange Duelist) */
-.swordsman-right {
-  animation: sword-run-right 3.6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-}
-
-/* Central Clash Impact (Spark Burst + Dust Clouds) */
-.clash-impact-center {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+.matrix-clash-core {
   width: 32px;
-  height: 32px;
-  pointer-events: none;
-  animation: clash-burst 3.6s linear infinite;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 0.85rem;
+  box-shadow: 0 0 12px rgba(249, 115, 22, 0.4);
+  animation: core-pulse 1.8s ease-in-out infinite alternate;
+  z-index: 2;
 }
 
-.clash-spark-star {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  background: #facc15;
-  clip-path: polygon(50% 0%, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0% 50%, 35% 35%);
-  box-shadow: 0 0 10px #facc15, 0 0 18px #f97316;
+@keyframes binary-slide-left {
+  0% { transform: translateX(-40px); opacity: 0.3; }
+  50% { transform: translateX(20px); opacity: 1; }
+  100% { transform: translateX(-40px); opacity: 0.3; }
 }
 
-.clash-spark-dot {
+@keyframes binary-slide-right {
+  0% { transform: translateX(40px); opacity: 0.3; }
+  50% { transform: translateX(-20px); opacity: 1; }
+  100% { transform: translateX(40px); opacity: 0.3; }
+}
+
+@keyframes core-pulse {
+  0% { transform: scale(0.92); box-shadow: 0 0 8px rgba(6, 182, 212, 0.4); }
+  100% { transform: scale(1.08); box-shadow: 0 0 16px rgba(249, 115, 22, 0.7); }
+}
+
+/* ==========================================================================
+   Option 3: Supercharged Central "VS" Sphere & Electric Orbitals
+   ========================================================================== */
+.vs-container-animated {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.vs-energy-orbit {
   position: absolute;
-  width: 4px;
-  height: 4px;
+  width: 84px;
+  height: 84px;
   border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 6px #fff;
+  border: 2px dashed rgba(249, 115, 22, 0.4);
+  animation: spin-orbit 8s linear infinite;
+  pointer-events: none;
 }
 
-.spark-p1 { top: 2px; left: 4px; }
-.spark-p2 { top: 3px; right: 3px; }
-.spark-p3 { bottom: 4px; left: 5px; }
-.spark-p4 { bottom: 2px; right: 4px; }
-
-/* Dust Puffs */
-.clash-dust-puff {
+.vs-energy-orbit-cyan {
   position: absolute;
-  bottom: 0px;
-  width: 8px;
-  height: 6px;
-  background: rgba(148, 163, 184, 0.7);
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
-  filter: blur(1px);
+  border: 1px dotted rgba(6, 182, 212, 0.5);
+  animation: spin-orbit-rev 12s linear infinite;
+  pointer-events: none;
 }
 
-.dust-left { left: 2px; }
-.dust-right { right: 2px; }
-
-/* Pixel Knight SVG Sprites */
-.pixel-knight-svg {
-  width: 24px;
-  height: 24px;
-  image-rendering: pixelated;
+.vs-circle-supercharged {
+  width: 68px;
+  height: 68px;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #dc2626 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: #fff;
+  font-size: 1.35rem;
+  box-shadow: 0 0 35px rgba(249, 115, 22, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 2;
+  animation: vs-pulse 2s infinite ease-in-out;
 }
 
-/* Animations */
-@keyframes sword-run-left {
-  0% { left: -32px; opacity: 0; transform: translateY(0); }
-  6% { opacity: 1; }
-  43% { left: calc(50% - 24px); transform: translateY(0); }
-  48% { left: calc(50% - 15px); transform: translateY(-4px) rotate(15deg); } /* Lunge Strike */
-  53% { left: calc(50% - 22px); transform: translateY(0) rotate(-8deg); }  /* Clash Recoil */
-  68% { left: calc(50% - 22px); opacity: 1; }
-  82% { left: calc(50% - 26px); opacity: 0; }
-  100% { left: -32px; opacity: 0; }
+@keyframes spin-orbit {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-@keyframes sword-run-right {
-  0% { right: -32px; opacity: 0; transform: scaleX(-1) translateY(0); }
-  6% { opacity: 1; }
-  43% { right: calc(50% - 24px); transform: scaleX(-1) translateY(0); }
-  48% { right: calc(50% - 15px); transform: scaleX(-1) translateY(-4px) rotate(15deg); } /* Lunge Strike */
-  53% { right: calc(50% - 22px); transform: scaleX(-1) translateY(0) rotate(-8deg); }  /* Clash Recoil */
-  68% { right: calc(50% - 22px); opacity: 1; }
-  82% { right: calc(50% - 26px); opacity: 0; }
-  100% { right: -32px; opacity: 0; }
+@keyframes spin-orbit-rev {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
 }
 
-@keyframes clash-burst {
-  0%, 46% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
-  48% { opacity: 1; transform: translate(-50%, -50%) scale(1.35); }
-  54% { opacity: 0.85; transform: translate(-50%, -50%) scale(1.6); }
-  60% { opacity: 0; transform: translate(-50%, -50%) scale(2.0); }
+@keyframes vs-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(249, 115, 22, 0.5); }
+  50% { transform: scale(1.06); box-shadow: 0 0 45px rgba(239, 68, 68, 0.8), 0 0 15px rgba(6, 182, 212, 0.5); }
+}
+
+/* ==========================================================================
+   Option 2: Live Radar Scanning HUD (When Waiting for Challenger)
+   ========================================================================== */
+.radar-hud-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 540px;
+  margin: 0 auto;
+  box-shadow: var(--shadow-md), 0 0 30px rgba(6, 182, 212, 0.1);
+  backdrop-filter: blur(16px);
+  text-align: left;
+}
+
+.radar-dish-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #06090e;
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
+}
+
+.radar-ring {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(6, 182, 212, 0.25);
+}
+
+.radar-sweep-beam {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(6, 182, 212, 0.5) 0deg, rgba(6, 182, 212, 0.1) 45deg, transparent 90deg, transparent 360deg);
+  animation: radar-sweep 2.5s linear infinite;
+}
+
+.radar-blip-dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan);
+  top: 18px;
+  right: 16px;
+  animation: blip-fade 2.5s infinite;
+}
+
+.radar-telemetry-text {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+@keyframes radar-sweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes blip-fade {
+  0%, 30% { opacity: 0; }
+  35% { opacity: 1; transform: scale(1.4); }
+  60% { opacity: 0.4; transform: scale(1); }
   100% { opacity: 0; }
 }
 
 @media (max-width: 960px) {
-  .swordsmen-track { display: none; }
+  .binary-matrix-track { display: none; }
+  .pacman-track { display: none; }
 }
 
 /* Buttons */
@@ -703,66 +780,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 3.5rem;
 }
 
-/* Hero Duel Interactive Widget Preview */
-.hero-preview-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  background: var(--bg-card);
-  border: 1px solid var(--border-medium);
-  border-radius: var(--radius-xl);
-  padding: 1.75rem;
-  box-shadow: var(--shadow-lg), 0 0 50px rgba(99, 102, 241, 0.15);
-  backdrop-filter: blur(20px);
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-preview-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--border-subtle);
-  margin-bottom: 1.5rem;
-}
-
-.hero-preview-grid {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 1.5rem;
-  align-items: center;
-}
-
-@media (max-width: 768px) {
-  .hero-preview-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.preview-player-pane {
-  background: var(--bg-input);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: 1.25rem;
-  text-align: left;
-}
-
-.preview-vs-sphere {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #f97316, #ef4444);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 1.25rem;
-  box-shadow: 0 0 25px var(--accent-orange-glow);
-  margin: 0 auto;
-}
-
 /* Cards & Grid System */
 .grid-3 {
   display: grid;
@@ -806,31 +823,6 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 1.5rem;
   margin-bottom: 1.25rem;
   color: var(--accent-violet);
-}
-
-/* Step Flow Cards */
-.step-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem;
-  position: relative;
-  transition: transform 0.25s ease;
-}
-
-.step-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--accent-cyan);
-}
-
-.step-number {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 1.8rem;
-  color: rgba(255, 255, 255, 0.15);
-  position: absolute;
-  top: 1rem;
-  right: 1.25rem;
 }
 
 /* Badges */
