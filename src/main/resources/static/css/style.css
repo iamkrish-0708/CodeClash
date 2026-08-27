@@ -143,7 +143,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ==========================================================================
-   Navbar & Retro Pacman Horizontal Track
+   Navbar & Animation Tracks
    ========================================================================== */
 .navbar {
   display: flex;
@@ -244,7 +244,9 @@ h1, h2, h3, h4, h5, h6 {
   white-space: nowrap;
 }
 
-/* Pacman Track Component */
+/* ==========================================================================
+   Pacman Track Component
+   ========================================================================== */
 .pacman-track {
   flex: 1;
   max-width: 360px;
@@ -302,7 +304,6 @@ h1, h2, h3, h4, h5, h6 {
   will-change: transform;
 }
 
-/* Pacman Character */
 .pacman-char {
   width: 18px;
   height: 18px;
@@ -330,7 +331,6 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 8px rgba(250, 204, 21, 0.6);
 }
 
-/* Ghost Character (Blinky / Inky) */
 .ghost-char {
   width: 16px;
   height: 16px;
@@ -411,6 +411,148 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 960px) {
   .pacman-track { display: none; }
+}
+
+/* ==========================================================================
+   Pixel Swordsmen Dueling Track (Lobby Page Navbar)
+   ========================================================================== */
+.swordsmen-track {
+  flex: 1;
+  max-width: 420px;
+  height: 32px;
+  margin: 0 1.5rem;
+  background: rgba(9, 12, 19, 0.9);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  border-radius: var(--radius-pill);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.7), 0 0 15px rgba(249, 115, 22, 0.15);
+}
+
+.arena-ground-line {
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+  right: 10px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.3) 20%, rgba(249, 115, 22, 0.4) 50%, rgba(239, 68, 68, 0.3) 80%, transparent);
+}
+
+/* Swordsman Base */
+.swordsman-runner {
+  position: absolute;
+  bottom: 4px;
+  width: 26px;
+  height: 24px;
+  display: flex;
+  align-items: flex-end;
+  will-change: transform, left, right;
+}
+
+/* Left Swordsman (Blue/Cyan Duelist) */
+.swordsman-left {
+  animation: sword-run-left 3.6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+/* Right Swordsman (Red/Orange Duelist) */
+.swordsman-right {
+  animation: sword-run-right 3.6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+/* Central Clash Impact (Spark Burst + Dust Clouds) */
+.clash-impact-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+  animation: clash-burst 3.6s linear infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clash-spark-star {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #facc15;
+  clip-path: polygon(50% 0%, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0% 50%, 35% 35%);
+  box-shadow: 0 0 10px #facc15, 0 0 18px #f97316;
+}
+
+.clash-spark-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 6px #fff;
+}
+
+.spark-p1 { top: 2px; left: 4px; }
+.spark-p2 { top: 3px; right: 3px; }
+.spark-p3 { bottom: 4px; left: 5px; }
+.spark-p4 { bottom: 2px; right: 4px; }
+
+/* Dust Puffs */
+.clash-dust-puff {
+  position: absolute;
+  bottom: 0px;
+  width: 8px;
+  height: 6px;
+  background: rgba(148, 163, 184, 0.7);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+.dust-left { left: 2px; }
+.dust-right { right: 2px; }
+
+/* Pixel Knight SVG Sprites */
+.pixel-knight-svg {
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
+}
+
+/* Animations */
+@keyframes sword-run-left {
+  0% { left: -32px; opacity: 0; transform: translateY(0); }
+  6% { opacity: 1; }
+  43% { left: calc(50% - 24px); transform: translateY(0); }
+  48% { left: calc(50% - 15px); transform: translateY(-4px) rotate(15deg); } /* Lunge Strike */
+  53% { left: calc(50% - 22px); transform: translateY(0) rotate(-8deg); }  /* Clash Recoil */
+  68% { left: calc(50% - 22px); opacity: 1; }
+  82% { left: calc(50% - 26px); opacity: 0; }
+  100% { left: -32px; opacity: 0; }
+}
+
+@keyframes sword-run-right {
+  0% { right: -32px; opacity: 0; transform: scaleX(-1) translateY(0); }
+  6% { opacity: 1; }
+  43% { right: calc(50% - 24px); transform: scaleX(-1) translateY(0); }
+  48% { right: calc(50% - 15px); transform: scaleX(-1) translateY(-4px) rotate(15deg); } /* Lunge Strike */
+  53% { right: calc(50% - 22px); transform: scaleX(-1) translateY(0) rotate(-8deg); }  /* Clash Recoil */
+  68% { right: calc(50% - 22px); opacity: 1; }
+  82% { right: calc(50% - 26px); opacity: 0; }
+  100% { right: -32px; opacity: 0; }
+}
+
+@keyframes clash-burst {
+  0%, 46% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+  48% { opacity: 1; transform: translate(-50%, -50%) scale(1.35); }
+  54% { opacity: 0.85; transform: translate(-50%, -50%) scale(1.6); }
+  60% { opacity: 0; transform: translate(-50%, -50%) scale(2.0); }
+  100% { opacity: 0; }
+}
+
+@media (max-width: 960px) {
+  .swordsmen-track { display: none; }
 }
 
 /* Buttons */
