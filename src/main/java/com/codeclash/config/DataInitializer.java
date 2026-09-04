@@ -69,7 +69,53 @@ public class DataInitializer implements CommandLineRunner {
             "    }\n" +
             "}";
 
-        if (problemRepository.count() > 0) {
+        String containsDuplicateBoilerplate = 
+            "import java.util.*;\n\n" +
+            "public class Solution {\n" +
+            "    public static void main(String[] args) {\n" +
+            "        Scanner sc = new Scanner(System.in);\n" +
+            "        if (!sc.hasNextInt()) return;\n" +
+            "        int n = sc.nextInt();\n" +
+            "        int[] nums = new int[n];\n" +
+            "        for (int i = 0; i < n; i++) {\n" +
+            "            nums[i] = sc.nextInt();\n" +
+            "        }\n\n" +
+            "        // TODO: Write your solution logic here\n" +
+            "        // Print \"true\" if any value appears at least twice in the array, or \"false\" otherwise\n" +
+            "        \n" +
+            "    }\n" +
+            "}";
+
+        // Check and seed LeetCode 217: Contains Duplicate
+        if (problemRepository.findBySlug("contains-duplicate").isEmpty()) {
+            log.info("Seeding LeetCode 217: Contains Duplicate into problem library...");
+            Problem containsDuplicate = Problem.builder()
+                    .title("Contains Duplicate")
+                    .slug("contains-duplicate")
+                    .difficulty(Problem.Difficulty.EASY)
+                    .timeLimitSeconds(600)
+                    .memoryLimitMb(128)
+                    .description("### Description\n" +
+                            "Given an integer array `nums`, print `true` if any value appears at least twice in the array, and print `false` if every element is distinct.\n\n" +
+                            "**Input Format:**\n" +
+                            "First line contains an integer `N` representing the size of the array.\n" +
+                            "Second line contains `N` space-separated integers representing `nums`.\n\n" +
+                            "**Output Format:**\n" +
+                            "`true` or `false`")
+                    .starterCodeJava(containsDuplicateBoilerplate)
+                    .build();
+
+            containsDuplicate.addTestCase(TestCase.builder().inputData("4\n1 2 3 1").expectedOutput("true").isHidden(false).orderIndex(1).build());
+            containsDuplicate.addTestCase(TestCase.builder().inputData("4\n1 2 3 4").expectedOutput("false").isHidden(false).orderIndex(2).build());
+            containsDuplicate.addTestCase(TestCase.builder().inputData("10\n1 1 1 3 3 4 3 2 4 2").expectedOutput("true").isHidden(true).orderIndex(3).build());
+            containsDuplicate.addTestCase(TestCase.builder().inputData("1\n99").expectedOutput("false").isHidden(true).orderIndex(4).build());
+            containsDuplicate.addTestCase(TestCase.builder().inputData("5\n10 20 30 40 50").expectedOutput("false").isHidden(true).orderIndex(5).build());
+
+            problemRepository.save(containsDuplicate);
+            log.info("Contains Duplicate seeded successfully.");
+        }
+
+        if (problemRepository.count() > 1) {
             log.info("Updating existing problem starter codes to clean boilerplate templates...");
             Optional<Problem> p1 = problemRepository.findBySlug("two-sum");
             p1.ifPresent(p -> { p.setStarterCodeJava(twoSumBoilerplate); problemRepository.save(p); });
@@ -79,6 +125,9 @@ public class DataInitializer implements CommandLineRunner {
 
             Optional<Problem> p3 = problemRepository.findBySlug("valid-parentheses");
             p3.ifPresent(p -> { p.setStarterCodeJava(parenthesesBoilerplate); problemRepository.save(p); });
+
+            Optional<Problem> p4 = problemRepository.findBySlug("contains-duplicate");
+            p4.ifPresent(p -> { p.setStarterCodeJava(containsDuplicateBoilerplate); problemRepository.save(p); });
 
             log.info("Starter code templates updated successfully.");
             return;
