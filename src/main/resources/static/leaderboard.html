@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Global Leaderboard — CodeClash Arena</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=5">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -113,62 +113,32 @@
   </style>
 </head>
 <body>
-  <!-- Top Navigation with Pac-Man Track -->
+  <!-- Top Navigation with Section Navigation Buttons -->
   <header class="navbar">
-    <div style="display: flex; align-items: center; gap: 1.5rem;">
-      <a href="index.html" class="nav-brand">
-        <span class="brand-icon">⚔️</span>
-        <span>Code<span class="brand-text-accent">Clash</span></span>
-      </a>
-      <div style="display: flex; align-items: center; gap: 1.25rem;">
-        <a href="index.html#challenges" class="nav-link">Challenges</a>
-        <a href="leaderboard.html" class="nav-link" style="color: var(--text-primary);">🏆 Leaderboard</a>
-      </div>
-    </div>
+    <a href="index.html" class="nav-brand">
+      <span class="brand-icon">⚔️</span>
+      <span>Code<span class="brand-text-accent">Clash</span></span>
+    </a>
 
-    <!-- Retro Pac-Man Animated Navbar Track -->
-    <div class="pacman-track">
-      <div class="pacman-dots-bg">
-        <span class="pacman-dot"></span>
-        <span class="pacman-dot"></span>
-        <span class="pacman-energizer"></span>
-        <span class="pacman-dot"></span>
-        <span class="pacman-dot"></span>
-        <span class="pacman-dot"></span>
-        <span class="pacman-energizer"></span>
-        <span class="pacman-dot"></span>
-        <span class="pacman-dot"></span>
-        <span class="pacman-dot"></span>
-      </div>
-      <div class="pacman-squad-runner">
-        <div class="pacman-char">
-          <div class="pacman-top"></div>
-          <div class="pacman-bottom"></div>
-        </div>
-        <div class="ghost-char ghost-red">
-          <div class="ghost-eyes">
-            <div class="ghost-eye"></div>
-            <div class="ghost-eye"></div>
-          </div>
-          <div class="ghost-skirt">
-            <div class="ghost-tentacle"></div>
-            <div class="ghost-tentacle"></div>
-            <div class="ghost-tentacle"></div>
-          </div>
-        </div>
-        <div class="ghost-char ghost-cyan">
-          <div class="ghost-eyes">
-            <div class="ghost-eye"></div>
-            <div class="ghost-eye"></div>
-          </div>
-          <div class="ghost-skirt">
-            <div class="ghost-tentacle"></div>
-            <div class="ghost-tentacle"></div>
-            <div class="ghost-tentacle"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Cool Dark Themed Reactive Navigation Capsule -->
+    <nav class="nav-section-bar" aria-label="Page Navigation">
+      <a href="index.html" class="nav-section-btn btn-feat">
+        <span class="nav-btn-icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="index.html#how-it-works" class="nav-section-btn btn-arena">
+        <span class="nav-btn-icon">⚡</span>
+        <span>How It Works</span>
+      </a>
+      <a href="index.html#challenges" class="nav-section-btn btn-challenges">
+        <span class="nav-btn-icon">📂</span>
+        <span>Challenges</span>
+      </a>
+      <a href="leaderboard.html" class="nav-section-btn btn-rankings" style="color: #f8fafc; border-color: rgba(250, 204, 21, 0.4); background: rgba(250, 204, 21, 0.08);">
+        <span class="nav-btn-icon">🏆</span>
+        <span>Leaderboard</span>
+      </a>
+    </nav>
 
     <nav class="nav-links" id="navAuth">
       <span class="nav-status-pill">🟢 Arena Online</span>
