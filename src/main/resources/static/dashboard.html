@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -7,179 +7,121 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    .stats-row {
+    .stats-grid-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 1.25rem;
       margin-bottom: 2.5rem;
     }
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem 1.25rem;
-      text-align: center;
-      backdrop-filter: blur(12px);
-      transition: all 0.25s ease;
-    }
-    .stat-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--border-accent);
-      background: var(--bg-card-hover);
-    }
-    .stat-val {
-      font-size: 2.2rem;
-      font-weight: 800;
-      font-family: var(--font-mono);
-      color: var(--accent-cyan);
-      margin-top: 0.35rem;
-    }
-    .stat-label {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-family: var(--font-display);
-      font-weight: 700;
-      color: var(--text-secondary);
-    }
-    .room-actions {
+    .room-actions-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.75rem;
+      gap: 1.5rem;
       margin-top: 1rem;
     }
-    @media (max-width: 768px) {
-      .room-actions { grid-template-columns: 1fr; }
+    @media (max-width: 900px) {
+      .stats-grid-container { grid-template-columns: repeat(2, 1fr); }
+      .room-actions-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 540px) {
+      .stats-grid-container { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <!-- Top Navigation with Pac-Man Track -->
+  <!-- Top Navigation -->
   <header class="navbar">
-    <div style="display: flex; align-items: center; gap: 1.5rem;">
-      <a href="index.html" class="nav-brand">
-        <span class="brand-icon">⚔️</span>
-        <span>Code<span class="brand-text-accent">Clash</span></span>
-      </a>
-      <div style="display: flex; align-items: center; gap: 1.25rem;">
-        <a href="index.html#challenges" class="nav-link">Challenges</a>
-        <a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a>
-      </div>
-    </div>
+    <a href="index.html" class="nav-brand">
+      <img src="images/logo.png" alt="CodeClash" class="brand-icon-img" onerror="this.style.display='none'; document.getElementById('fallbackIcon').style.display='inline-flex';">
+      <span class="brand-icon" id="fallbackIcon" style="display:none;"><i data-lucide="swords" style="width:18px;height:18px;"></i></span>
+      <span>Code<span class="brand-text-accent">Clash</span></span>
+    </a>
 
-    <!-- Retro Pac-Man Animated Navbar Track -->
-    <div class="pacman-track">
-      <div class="pacman-dots-bg">
-        <span class="pacman-dot"></span>
-        <span class="pacman-dot"></span>
-        <span class="pacman-energizer"></span>
-        <span class="pacman-dot"></span>
-        <span class="pacman-dot"></span>
-        <span class="pacman-dot"></span>
-        <span class="pacman-energizer"></span>
-        <span class="pacman-dot"></span>
-        <span class="pacman-dot"></span>
-        <span class="pacman-dot"></span>
-      </div>
-      <div class="pacman-squad-runner">
-        <div class="pacman-char">
-          <div class="pacman-top"></div>
-          <div class="pacman-bottom"></div>
-        </div>
-        <div class="ghost-char ghost-red">
-          <div class="ghost-eyes">
-            <div class="ghost-eye"></div>
-            <div class="ghost-eye"></div>
-          </div>
-          <div class="ghost-skirt">
-            <div class="ghost-tentacle"></div>
-            <div class="ghost-tentacle"></div>
-            <div class="ghost-tentacle"></div>
-          </div>
-        </div>
-        <div class="ghost-char ghost-cyan">
-          <div class="ghost-eyes">
-            <div class="ghost-eye"></div>
-            <div class="ghost-eye"></div>
-          </div>
-          <div class="ghost-skirt">
-            <div class="ghost-tentacle"></div>
-            <div class="ghost-tentacle"></div>
-            <div class="ghost-tentacle"></div>
-          </div>
-        </div>
-      </div>
+    <div class="nav-links">
+      <a href="index.html#challenges" class="nav-link"><i data-lucide="code-2" style="width:15px;height:15px;"></i> Challenges</a>
+      <a href="leaderboard.html" class="nav-link"><i data-lucide="trophy" style="width:15px;height:15px;"></i> Leaderboard</a>
     </div>
 
     <nav class="nav-links" id="navLinks">
-      <span class="nav-status-pill">🟢 Battle Engine Online</span>
-      <span id="userBadge" style="color: var(--accent-cyan); font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;">Loading...</span>
-      <button onclick="handleLogout()" class="btn btn-outline" style="padding: 0.45rem 1rem;">Logout</button>
+      <span class="nav-status-pill"><span class="nav-status-dot"></span> Battle Engine Online</span>
+      <span id="userBadge" style="color: var(--accent-coral); font-family: var(--font-display); font-weight: 700; font-size: 0.92rem;">Loading...</span>
+      <button onclick="handleLogout()" class="btn btn-outline btn-sm">Logout</button>
     </nav>
   </header>
 
   <main class="container">
     <!-- Player Hero Banner -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-medium); border-radius: var(--radius-xl); padding: 2rem; backdrop-filter: blur(16px);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 2.25rem 2rem;">
       <div>
-        <div style="font-size: 0.85rem; font-family: var(--font-display); font-weight: 700; color: var(--accent-orange); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.25rem;">
+        <div class="badge badge-coral" style="margin-bottom: 0.6rem;">
+          <i data-lucide="shield" style="width:12px;height:12px;"></i>
           ACTIVE DUELIST HUB
         </div>
-        <h1 id="welcomeHeading" style="font-size: 2.2rem; font-weight: 900;">Welcome, Player</h1>
+        <h1 id="welcomeHeading" style="font-size: 2rem; font-weight: 800; color: #ffffff;">Welcome, Player</h1>
         <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.25rem;">Ready to challenge your next rival in the 1v1 Arena?</p>
       </div>
-      <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.35); padding: 0.85rem 1.75rem; border-radius: var(--radius-lg); text-align: right;">
-        <div style="color: var(--text-secondary); font-size: 0.8rem; font-family: var(--font-display); font-weight: 700; text-transform: uppercase;">Official Elo Rating</div>
-        <div id="playerElo" style="color: var(--accent-cyan); font-weight: 900; font-family: var(--font-mono); font-size: 1.8rem;">1200</div>
+      <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-accent); padding: 1rem 1.75rem; border-radius: var(--radius-lg); text-align: right;">
+        <div style="color: var(--text-muted); font-size: 0.75rem; font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Official Elo Rating</div>
+        <div id="playerElo" style="color: var(--accent-coral); font-weight: 900; font-family: var(--font-mono); font-size: 1.8rem; line-height: 1.1; margin-top: 0.2rem;">1200</div>
       </div>
     </div>
 
-    <!-- Stats Grid Row -->
-    <div class="stats-row">
+    <!-- Stats Grid Row (Reference B Bold Numerics) -->
+    <div class="stats-grid-container">
       <div class="stat-card">
-        <div class="stat-label">Matches Duelled</div>
-        <div class="stat-val" id="statMatches">0</div>
+        <div class="stat-card-label"><i data-lucide="swords" style="width:14px;height:14px;"></i> Matches Duelled</div>
+        <div class="stat-card-value" id="statMatches">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Victories</div>
-        <div class="stat-val" style="color: var(--accent-green);" id="statWins">0</div>
+        <div class="stat-card-label"><i data-lucide="trophy" style="width:14px;height:14px;color:var(--accent-green);"></i> Victories</div>
+        <div class="stat-card-value" style="color: var(--accent-green);" id="statWins">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Defeats</div>
-        <div class="stat-val" style="color: var(--accent-red);" id="statLosses">0</div>
+        <div class="stat-card-label"><i data-lucide="x-circle" style="width:14px;height:14px;color:var(--accent-red);"></i> Defeats</div>
+        <div class="stat-card-value" style="color: var(--accent-red);" id="statLosses">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Win Rate</div>
-        <div class="stat-val" style="color: var(--accent-orange);" id="statWinRate">0%</div>
+        <div class="stat-card-label"><i data-lucide="percent" style="width:14px;height:14px;color:#f59e0b;"></i> Win Rate</div>
+        <div class="stat-card-value" style="color: #f59e0b;" id="statWinRate">0%</div>
       </div>
     </div>
 
     <!-- Matchmaking Operations -->
-    <div class="room-actions">
+    <div class="room-actions-grid">
       <!-- Create Room -->
-      <div class="card" style="border-color: rgba(249, 115, 22, 0.3);">
-        <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">🎮</div>
-        <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.4rem;">Create 1v1 Battle Lobby</h2>
-        <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 1.5rem; line-height: 1.5;">
-          Generate a 6-character room code, share with your challenger, and start when both players are ready.
-        </p>
+      <div class="card" style="border-color: var(--border-accent); justify-content: space-between;">
+        <div>
+          <div class="card-feature-icon">
+            <i data-lucide="plus-circle" style="width:24px;height:24px;"></i>
+          </div>
+          <h2 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.4rem;">Create 1v1 Battle Lobby</h2>
+          <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 1.5rem; line-height: 1.5;">
+            Generate a unique room code, share with your challenger, and duel head-to-head in real time.
+          </p>
+        </div>
         <button class="btn btn-primary" style="width: 100%; padding: 0.85rem;" id="createRoomBtn" onclick="handleCreateRoom()">
-          ⚡ Create Room Lobby
+          <i data-lucide="zap" style="width:16px;height:16px;"></i>
+          <span>Create Room Lobby</span>
         </button>
       </div>
 
       <!-- Join Room -->
-      <div class="card" style="border-color: rgba(6, 182, 212, 0.3);">
-        <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">🚪</div>
-        <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.4rem;">Join Existing Room</h2>
-        <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 1.25rem; line-height: 1.5;">
-          Enter the 6-character room code shared by your opponent to connect into their lobby.
-        </p>
+      <div class="card" style="justify-content: space-between;">
+        <div>
+          <div class="card-feature-icon" style="background: rgba(255,255,255,0.05); border-color: var(--border-medium); color: var(--text-primary);">
+            <i data-lucide="log-in" style="width:24px;height:24px;"></i>
+          </div>
+          <h2 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.4rem;">Join Existing Room</h2>
+          <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 1.5rem; line-height: 1.5;">
+            Enter the 6-character room code provided by your opponent to connect into their lobby.
+          </p>
+        </div>
         <div style="display: flex; gap: 0.65rem;">
           <input type="text" class="form-input" id="joinRoomCode" placeholder="e.g. CLASH-4821" style="text-transform: uppercase; font-family: var(--font-mono); font-weight: 700; letter-spacing: 1px;">
-          <button class="btn btn-outline" id="joinRoomBtn" onclick="handleJoinRoom()" style="padding: 0 1.5rem;">
+          <button class="btn btn-secondary" id="joinRoomBtn" onclick="handleJoinRoom()" style="padding: 0 1.5rem;">
             Join
           </button>
         </div>
@@ -189,13 +131,17 @@
 
   <footer>
     <div class="footer-content">
-      <div>⚔️ CodeClash — 1v1 Competitive Coding Platform</div>
+      <div style="display: flex; align-items: center; gap: 0.45rem;">
+        <i data-lucide="swords" style="width:16px;height:16px;color:var(--accent-coral);"></i> CodeClash — 1v1 Competitive Coding Platform
+      </div>
       <div style="color: var(--text-muted); font-size: 0.85rem;">&copy; 2026 CodeClash</div>
     </div>
   </footer>
 
   <script src="js/api.js"></script>
   <script>
+    if (window.lucide) lucide.createIcons();
+
     async function loadDashboard() {
       try {
         const user = await API.getCurrentUser();
@@ -221,7 +167,8 @@
       } catch (err) {
         alert(err.message || 'Failed to create room');
         btn.disabled = false;
-        btn.innerText = '⚡ Create Room Lobby';
+        btn.innerHTML = '<i data-lucide="zap" style="width:16px;height:16px;"></i> <span>Create Room Lobby</span>';
+        if (window.lucide) lucide.createIcons();
       }
     }
 

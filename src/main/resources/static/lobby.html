@@ -1,124 +1,104 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Battle Lobby — CodeClash</title>
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    .lobby-wrapper {
-      max-width: 820px;
-      margin: 2rem auto;
-      text-align: center;
-    }
-    .room-code-box {
+    .room-code-capsule {
       background: var(--bg-card);
-      border: 2px dashed rgba(6, 182, 212, 0.5);
+      border: 1px solid var(--border-accent);
       border-radius: var(--radius-xl);
-      padding: 1.75rem;
-      margin: 1.5rem 0 2.5rem;
-      display: inline-block;
-      min-width: 360px;
-      backdrop-filter: blur(16px);
-      box-shadow: 0 0 30px rgba(6, 182, 212, 0.15);
+      padding: 1.75rem 2.5rem;
+      margin: 1.5rem auto 2.5rem;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 4px 30px rgba(255, 77, 109, 0.12);
     }
     .room-code-text {
       font-family: var(--font-mono);
       font-size: 2.5rem;
       font-weight: 900;
       letter-spacing: 3px;
-      color: var(--accent-cyan);
-      margin: 0.25rem 0 0.75rem;
-    }
-    .versus-container {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 1.5rem;
-      align-items: center;
-      margin-bottom: 2.5rem;
-    }
-    @media (max-width: 680px) {
-      .versus-container { grid-template-columns: 1fr; }
-    }
-    .player-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-medium);
-      border-radius: var(--radius-xl);
-      padding: 2.25rem 1.5rem;
-      box-shadow: var(--shadow-md);
-      backdrop-filter: blur(14px);
-      transition: all 0.3s ease;
+      color: var(--accent-coral);
+      margin: 0.25rem 0 0.85rem;
     }
   </style>
 </head>
 <body>
-  <!-- Top Navigation with Option 4: Digital Matrix / Binary Code Clash -->
+  <!-- Top Navigation -->
   <header class="navbar">
     <a href="dashboard.html" class="nav-brand">
-      <span class="brand-icon">⚔️</span>
+      <img src="images/logo.png" alt="CodeClash" class="brand-icon-img" onerror="this.style.display='none'; document.getElementById('fallbackIcon').style.display='inline-flex';">
+      <span class="brand-icon" id="fallbackIcon" style="display:none;"><i data-lucide="swords" style="width:18px;height:18px;"></i></span>
       <span>Code<span class="brand-text-accent">Clash</span></span>
     </a>
 
-    <!-- Option 4: Binary Stream Clash in Navbar -->
-    <div class="binary-matrix-track">
-      <div class="binary-stream-left">1 0 1 1 0 1 0 0 1</div>
-      <div class="matrix-clash-core">⚔️</div>
-      <div class="binary-stream-right">0 1 1 0 1 0 1 1 0</div>
+    <div class="nav-links">
+      <span class="nav-status-pill"><span class="nav-status-dot"></span> Lobby Staging</span>
     </div>
 
     <nav class="nav-links">
-      <button onclick="handleLeave()" class="btn btn-outline" style="color: var(--accent-red); border-color: rgba(239, 68, 68, 0.3);">
-        Leave Lobby
+      <button onclick="handleLeave()" class="btn btn-outline btn-sm" style="color: var(--accent-red); border-color: rgba(239, 68, 68, 0.3);">
+        <i data-lucide="log-out" style="width:15px;height:15px;"></i> Leave Lobby
       </button>
     </nav>
   </header>
 
   <main class="container">
-    <div class="lobby-wrapper">
-      <span class="badge badge-easy" style="margin-bottom: 0.75rem;">1v1 MATCHMAKING</span>
-      <h1 style="font-size: 2.4rem; font-weight: 900;">Battle Lobby</h1>
-      <p style="color: var(--text-secondary); font-size: 1rem; margin-top: 0.35rem;">
-        Share this room code with your opponent to initiate the duel
+    <div class="lobby-stage">
+      <div class="badge badge-coral" style="margin-bottom: 0.75rem;">
+        <i data-lucide="swords" style="width:12px;height:12px;"></i> 1v1 MATCHMAKING
+      </div>
+      <h1 style="font-size: 2.2rem; font-weight: 800; color: #ffffff;">Battle Lobby</h1>
+      <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.25rem;">
+        Share this room code with your opponent to connect into the arena
       </p>
 
-      <div class="room-code-box">
-        <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-family: var(--font-display); font-weight: 700; letter-spacing: 1px;">
+      <div class="room-code-capsule">
+        <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-family: var(--font-display); font-weight: 700; letter-spacing: 1px;">
           Match Room Code
         </div>
         <div class="room-code-text" id="roomCodeDisplay">CLASH-....</div>
-        <button class="btn btn-outline" onclick="copyRoomCode()" id="copyBtn" style="padding: 0.45rem 1.2rem; font-size: 0.85rem;">
-          📋 Copy Code
+        <button class="btn btn-secondary btn-sm" onclick="copyRoomCode()" id="copyBtn">
+          <i data-lucide="copy" style="width:14px;height:14px;"></i>
+          <span>Copy Code</span>
         </button>
       </div>
 
-      <!-- Versus Cards with Option 3: Supercharged Central VS Sphere & Orbitals -->
-      <div class="versus-container">
+      <!-- Versus Matchup Staging Cards -->
+      <div class="lobby-matchup-grid">
         <!-- Host Card -->
-        <div class="player-card" style="border-color: rgba(245, 158, 11, 0.35); box-shadow: 0 0 25px rgba(245, 158, 11, 0.1);">
-          <div style="font-size: 3rem; margin-bottom: 0.5rem;">👑</div>
-          <h3 id="hostName" style="font-size: 1.35rem; font-weight: 800;">Host</h3>
-          <span class="badge badge-easy" style="margin-top: 0.65rem;" id="hostRating">1200 Elo</span>
+        <div class="player-stage-card is-ready">
+          <div class="player-avatar-box">
+            <i data-lucide="crown" style="width:36px;height:36px;color:#facc15;"></i>
+          </div>
+          <h3 id="hostName" style="font-size: 1.3rem; font-weight: 800; color: #ffffff;">Host</h3>
+          <span class="badge badge-easy" id="hostRating">1200 Elo</span>
         </div>
 
-        <!-- Option 3: Supercharged VS Energy Sphere -->
-        <div class="vs-container-animated">
-          <div class="vs-energy-orbit"></div>
-          <div class="vs-energy-orbit-cyan"></div>
-          <div class="vs-circle-supercharged">VS</div>
+        <!-- Central VS Sphere -->
+        <div class="vs-circle-simple">
+          VS
         </div>
 
         <!-- Guest Card -->
-        <div class="player-card" id="guestCard" style="border-color: rgba(99, 102, 241, 0.3);">
-          <div style="font-size: 3rem; margin-bottom: 0.5rem;" id="guestIcon">⏳</div>
-          <h3 id="guestName" style="font-size: 1.35rem; font-weight: 800; color: var(--text-muted);">Waiting for Rival...</h3>
-          <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--text-muted); margin-top: 0.65rem;" id="guestRating">---- Elo</span>
+        <div class="player-stage-card" id="guestCard">
+          <div class="player-avatar-box" style="border-color: var(--border-medium); color: var(--text-muted);" id="guestIcon">
+            <i data-lucide="loader-2" style="width:36px;height:36px;animation:spin-slow 3s linear infinite;"></i>
+          </div>
+          <h3 id="guestName" style="font-size: 1.3rem; font-weight: 800; color: var(--text-muted);">Waiting for Rival...</h3>
+          <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--text-muted);" id="guestRating">---- Elo</span>
         </div>
       </div>
 
-      <!-- Option 2: Live Radar Scanning HUD & Smart Duel Controls -->
+      <!-- Live Radar Scanning HUD & Smart Duel Controls -->
       <div id="controlsArea">
         <!-- Radar Scanning HUD (Rendered when 1 player is waiting) -->
         <div class="radar-hud-box" id="radarScanningBox">
@@ -128,10 +108,10 @@
             <div class="radar-blip-dot"></div>
           </div>
           <div class="radar-telemetry-text">
-            <div style="color: var(--accent-cyan); font-weight: 800; font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 0.2rem;">
-              [RADAR] 📡 Scanning for Challenger...
+            <div style="color: var(--accent-coral); font-weight: 800; font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 0.2rem;">
+              [RADAR] Scanning for Challenger...
             </div>
-            <div>Waiting for rival to connect with code <strong id="radarRoomCode" style="color: var(--accent-orange);">CLASH-....</strong></div>
+            <div>Waiting for rival to connect with code <strong id="radarRoomCode" style="color: #ffffff;">CLASH-....</strong></div>
             <div style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.25rem;">// Standard 1v1 Ranked Rules (K=32) • Java 21 Arena Ready</div>
           </div>
         </div>
@@ -141,13 +121,17 @@
 
   <footer>
     <div class="footer-content">
-      <div>⚔️ CodeClash — 1v1 Competitive Coding Platform</div>
+      <div style="display: flex; align-items: center; gap: 0.45rem;">
+        <i data-lucide="swords" style="width:16px;height:16px;color:var(--accent-coral);"></i> CodeClash — 1v1 Competitive Coding Platform
+      </div>
       <div style="color: var(--text-muted); font-size: 0.85rem;">&copy; 2026 CodeClash</div>
     </div>
   </footer>
 
   <script src="js/api.js"></script>
   <script>
+    if (window.lucide) lucide.createIcons();
+
     const urlParams = new URLSearchParams(window.location.search);
     const roomCode = urlParams.get('code');
     let currentUser = null;
@@ -186,19 +170,21 @@
         // Update Guest & Matchmaking Controls
         const controlsArea = document.getElementById('controlsArea');
         if (room.guestUserId) {
-          document.getElementById('guestIcon').innerText = '🤺';
+          const guestIcon = document.getElementById('guestIcon');
+          guestIcon.innerHTML = '<i data-lucide="user-check" style="width:36px;height:36px;color:var(--accent-coral);"></i>';
+          guestIcon.style.borderColor = 'var(--border-accent)';
           document.getElementById('guestName').innerText = room.guestUsername;
-          document.getElementById('guestName').style.color = 'var(--text-primary)';
+          document.getElementById('guestName').style.color = '#ffffff';
           document.getElementById('guestRating').innerText = `${room.guestRating} Elo`;
           document.getElementById('guestRating').className = 'badge badge-medium';
-          document.getElementById('guestCard').style.borderColor = 'rgba(6, 182, 212, 0.4)';
-          document.getElementById('guestCard').style.boxShadow = '0 0 25px rgba(6, 182, 212, 0.15)';
+          document.getElementById('guestCard').classList.add('is-ready');
 
           if (isHost) {
             controlsArea.innerHTML = `
               <div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem;">
-                <button class="btn btn-primary" id="startMatchBtn" style="padding: 1rem 3.5rem; font-size: 1.2rem; box-shadow: 0 0 35px var(--accent-orange-glow);" onclick="handleStartMatch()">
-                  ⚔️ Start 1v1 Duel
+                <button class="btn btn-primary btn-lg" id="startMatchBtn" style="padding: 1rem 3.5rem; font-size: 1.15rem;" onclick="handleStartMatch()">
+                  <i data-lucide="swords" style="width:20px;height:20px;"></i>
+                  <span>Start 1v1 Duel</span>
                 </button>
                 <div style="color: var(--accent-green); font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;">
                   ✓ Challenger ${room.guestUsername} is locked & ready! Click to begin the match.
@@ -207,8 +193,8 @@
             `;
           } else {
             controlsArea.innerHTML = `
-              <div style="background: var(--bg-card); border: 1px solid rgba(6, 182, 212, 0.35); padding: 1.25rem 2rem; border-radius: var(--radius-xl); display: inline-block;">
-                <div style="color: var(--accent-cyan); font-family: var(--font-display); font-weight: 800; font-size: 1.15rem;">
+              <div style="background: var(--bg-card); border: 1px solid var(--border-accent); padding: 1.25rem 2rem; border-radius: var(--radius-xl); display: inline-block;">
+                <div style="color: var(--accent-coral); font-family: var(--font-display); font-weight: 800; font-size: 1.15rem;">
                   🎮 Challenger Connected!
                 </div>
                 <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.3rem;">
@@ -217,6 +203,7 @@
               </div>
             `;
           }
+          if (window.lucide) lucide.createIcons();
         } else {
           // Only 1 player in the room — Keep Radar Scanning HUD
           if (!document.getElementById('radarScanningBox')) {
@@ -228,10 +215,10 @@
                   <div class="radar-blip-dot"></div>
                 </div>
                 <div class="radar-telemetry-text">
-                  <div style="color: var(--accent-cyan); font-weight: 800; font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 0.2rem;">
-                    [RADAR] 📡 Scanning for Challenger...
+                  <div style="color: var(--accent-coral); font-weight: 800; font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 0.2rem;">
+                    [RADAR] Scanning for Challenger...
                   </div>
-                  <div>Waiting for rival to connect with code <strong style="color: var(--accent-orange);">${roomCode}</strong></div>
+                  <div>Waiting for rival to connect with code <strong style="color: #ffffff;">${roomCode}</strong></div>
                   <div style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.25rem;">// Standard 1v1 Ranked Rules (K=32) • Java 21 Arena Ready</div>
                 </div>
               </div>
@@ -253,7 +240,7 @@
       const btn = document.getElementById('startMatchBtn');
       if (btn) {
         btn.disabled = true;
-        btn.innerText = '🚀 Launching Duel...';
+        btn.innerText = 'Launching Duel...';
       }
       try {
         const match = await API.startMatch(roomId);
@@ -263,7 +250,8 @@
         alert(err.message || 'Failed to start match');
         if (btn) {
           btn.disabled = false;
-          btn.innerText = '⚔️ Start 1v1 Duel';
+          btn.innerHTML = '<i data-lucide="swords" style="width:20px;height:20px;"></i> <span>Start 1v1 Duel</span>';
+          if (window.lucide) lucide.createIcons();
         }
       }
     }
@@ -277,8 +265,12 @@
     function copyRoomCode() {
       navigator.clipboard.writeText(roomCode);
       const btn = document.getElementById('copyBtn');
-      btn.innerText = '✓ Copied!';
-      setTimeout(() => { btn.innerText = '📋 Copy Code'; }, 1500);
+      btn.innerHTML = '<i data-lucide="check" style="width:14px;height:14px;"></i> <span>Copied!</span>';
+      if (window.lucide) lucide.createIcons();
+      setTimeout(() => {
+        btn.innerHTML = '<i data-lucide="copy" style="width:14px;height:14px;"></i> <span>Copy Code</span>';
+        if (window.lucide) lucide.createIcons();
+      }, 1500);
     }
 
     init();
