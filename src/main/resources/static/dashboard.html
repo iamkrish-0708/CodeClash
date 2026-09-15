@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -127,6 +127,33 @@
         </div>
       </div>
     </div>
+
+    <!-- Challenge Vault Section (Practice in Arena) -->
+    <section id="dashChallenges" style="margin-top: 4.5rem; margin-bottom: 2rem;">
+      <div class="section-header" style="flex-wrap: wrap; gap: 1.5rem;">
+        <div>
+          <span class="badge badge-coral" style="margin-bottom: 0.75rem;">
+            <i data-lucide="code-2" style="width:12px;height:12px;"></i> PRACTICE POOL
+          </span>
+          <h2 class="section-title">Algorithmic Challenge Vault</h2>
+          <p class="section-subtitle">Sharpen your Java problem-solving skills before entering ranked matches</p>
+        </div>
+        <!-- Filter Controls -->
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="dashFilterContainer">
+          <button class="filter-chip active" onclick="filterDashChallenges('ALL')">All Challenges</button>
+          <button class="filter-chip" onclick="filterDashChallenges('EASY')">Easy</button>
+          <button class="filter-chip" onclick="filterDashChallenges('MEDIUM')">Medium</button>
+          <button class="filter-chip" onclick="filterDashChallenges('HARD')">Hard</button>
+        </div>
+      </div>
+
+      <!-- Problem Cards Grid -->
+      <div class="grid-3" id="dashProblemsList">
+        <div style="text-align: center; grid-column: 1 / -1; padding: 3rem; color: var(--text-muted);" class="skeleton-shimmer">
+          Loading challenge pool...
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -142,6 +169,8 @@
   <script>
     if (window.lucide) lucide.createIcons();
 
+    let dashProblemsData = [];
+
     async function loadDashboard() {
       try {
         const user = await API.getCurrentUser();
@@ -154,6 +183,72 @@
         document.getElementById('statWinRate').innerText = `${user.winRate}%`;
       } catch (err) {
         window.location.href = 'login.html';
+      }
+    }
+
+    async function loadDashProblems() {
+      const container = document.getElementById('dashProblemsList');
+      try {
+        dashProblemsData = await API.getProblems();
+        renderDashProblems(dashProblemsData);
+      } catch (err) {
+        container.innerHTML = `<div style="text-align:center; grid-column:1/-1; color: var(--accent-red);">Failed to connect to backend server.</div>`;
+      }
+    }
+
+    function renderDashProblems(problems) {
+      const container = document.getElementById('dashProblemsList');
+      if (!problems || problems.length === 0) {
+        container.innerHTML = `<div style="text-align:center; grid-column:1/-1; color: var(--text-muted); padding: 3rem;">No problems found matching this filter.</div>`;
+        return;
+      }
+
+      const tagsMap = {
+        'two-sum': ['Arrays', 'Hash Table', 'Two Pointers'],
+        'palindrome-number': ['Math', 'String Manipulation'],
+        'valid-parentheses': ['Stack', 'Strings', 'Data Structures'],
+        'contains-duplicate': ['Arrays', 'Hash Set', 'Sorting']
+      };
+
+      container.innerHTML = problems.map(p => {
+        const tags = tagsMap[p.slug] || ['Algorithms', 'Logic'];
+        return `
+          <div class="challenge-card">
+            <div>
+              <div class="challenge-header">
+                <h3 class="challenge-title">${p.title}</h3>
+                <span class="badge badge-${p.difficulty.toLowerCase()}">${p.difficulty}</span>
+              </div>
+              <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.75rem; margin-bottom: 1rem;">
+                ${tags.map(t => `<span class="badge badge-tag">${t}</span>`).join('')}
+              </div>
+            </div>
+            <div>
+              <div class="challenge-stats-row">
+                <span class="challenge-stat-item"><i data-lucide="clock" style="width:14px;height:14px;"></i> ${Math.floor(p.timeLimitSeconds / 60)} min</span>
+                <span class="challenge-stat-item"><i data-lucide="hard-drive" style="width:14px;height:14px;"></i> ${p.memoryLimitMb} MB</span>
+                <span class="challenge-stat-item"><i data-lucide="code" style="width:14px;height:14px;"></i> Java</span>
+              </div>
+              <a href="arena.html?problemId=${p.id}" class="btn btn-outline btn-sm" style="width: 100%; margin-top: 1rem;">
+                <i data-lucide="play" style="width:14px;height:14px;"></i> Practice in Arena
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function filterDashChallenges(diff) {
+      const chips = document.querySelectorAll('#dashFilterContainer .filter-chip');
+      chips.forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (diff === 'ALL') {
+        renderDashProblems(dashProblemsData);
+      } else {
+        const filtered = dashProblemsData.filter(p => p.difficulty === diff);
+        renderDashProblems(filtered);
       }
     }
 
@@ -199,6 +294,7 @@
     }
 
     loadDashboard();
+    loadDashProblems();
   </script>
 </body>
 </html>

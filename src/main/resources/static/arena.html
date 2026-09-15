@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -179,7 +179,7 @@
     <div style="display: flex; align-items: center; gap: 1.25rem;">
       <div id="opponentBadge" style="background: var(--bg-card); border: 1px solid var(--border-medium); padding: 0.35rem 0.9rem; border-radius: var(--radius-md); font-size: 0.82rem; display: none;">
         <span style="color: var(--text-muted); font-family: var(--font-display); font-weight: 700;">Rival Radar:</span>
-        <span id="opponentStatusText" style="color: var(--accent-coral); font-weight: 700; font-family: var(--font-display); margin-left: 0.35rem;">Thinking...</span>
+        <span id="opponentStatusText" class="animated-dots" style="color: var(--accent-coral); font-weight: 700; font-family: var(--font-display); margin-left: 0.35rem;">Thinking</span>
       </div>
 
       <div class="timer-badge" id="matchTimer">
@@ -199,10 +199,10 @@
     <div class="panel-left">
       <div class="panel-header">
         <h2 id="problemTitle" style="font-size: 1.35rem; font-weight: 800; color:#ffffff;">Loading Challenge...</h2>
-        <div style="display: flex; gap: 0.85rem; margin-top: 0.5rem; font-size: 0.82rem; color: var(--text-muted); font-family: var(--font-mono);">
-          <span><i data-lucide="clock" style="width:13px;height:13px;vertical-align:text-bottom;"></i> Limit: <span id="timeLimit">15</span>m</span>
-          <span><i data-lucide="hard-drive" style="width:13px;height:13px;vertical-align:text-bottom;"></i> Memory: <span id="memoryLimit">128</span>MB</span>
-          <span><i data-lucide="code" style="width:13px;height:13px;vertical-align:text-bottom;"></i> Java 21</span>
+        <div style="display: flex; gap: 1.25rem; margin-top: 0.6rem; flex-wrap: wrap;">
+          <span class="spec-item"><i data-lucide="clock" style="width:16px;height:16px;"></i> <span>Limit: <span id="timeLimit">15</span>m</span></span>
+          <span class="spec-item"><i data-lucide="hard-drive" style="width:16px;height:16px;"></i> <span>Memory: <span id="memoryLimit">128</span>MB</span></span>
+          <span class="spec-item"><i data-lucide="code" style="width:16px;height:16px;"></i> <span>Java 21</span></span>
         </div>
       </div>
       <div class="panel-body" id="problemDescription">
@@ -313,9 +313,16 @@
           const opponent = match.players.find(p => p.userId !== currentUser.id);
           if (opponent) {
             const oppStatusEl = document.getElementById('opponentStatusText');
-            if (opponent.result === 'WIN') oppStatusEl.innerText = 'Submitted 100% (Winner)';
-            else if (opponent.hasSubmitted) oppStatusEl.innerText = `Submitted (${opponent.passedTestCases}/${opponent.totalTestCases} Tests)`;
-            else oppStatusEl.innerText = 'Writing Code...';
+            if (opponent.result === 'WIN') {
+              oppStatusEl.className = '';
+              oppStatusEl.innerText = 'Submitted 100% (Winner)';
+            } else if (opponent.hasSubmitted) {
+              oppStatusEl.className = '';
+              oppStatusEl.innerText = `Submitted (${opponent.passedTestCases}/${opponent.totalTestCases} Tests)`;
+            } else {
+              oppStatusEl.className = 'animated-dots';
+              oppStatusEl.innerText = 'Writing Code';
+            }
           }
         }
 

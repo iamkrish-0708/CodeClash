@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -90,10 +90,10 @@
 
         <!-- Guest Card -->
         <div class="player-stage-card" id="guestCard">
-          <div class="player-avatar-box" style="border-color: var(--border-medium); color: var(--text-muted);" id="guestIcon">
+          <div class="player-avatar-box radar-ping-avatar" style="border-color: var(--border-medium); color: var(--text-muted);" id="guestIcon">
             <i data-lucide="loader-2" style="width:36px;height:36px;animation:spin-slow 3s linear infinite;"></i>
           </div>
-          <h3 id="guestName" style="font-size: 1.3rem; font-weight: 800; color: var(--text-muted);">Waiting for Rival...</h3>
+          <h3 id="guestName" class="animated-dots" style="font-size: 1.3rem; font-weight: 800; color: var(--text-muted);">Waiting for Rival</h3>
           <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--text-muted);" id="guestRating">---- Elo</span>
         </div>
       </div>
@@ -108,8 +108,8 @@
             <div class="radar-blip-dot"></div>
           </div>
           <div class="radar-telemetry-text">
-            <div style="color: var(--accent-coral); font-weight: 800; font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 0.2rem;">
-              [RADAR] Scanning for Challenger...
+            <div class="animated-dots" style="color: var(--accent-coral); font-weight: 800; font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 0.2rem;">
+              [RADAR] Scanning for Challenger
             </div>
             <div>Waiting for rival to connect with code <strong id="radarRoomCode" style="color: #ffffff;">CLASH-....</strong></div>
             <div style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.25rem;">// Standard 1v1 Ranked Rules (K=32) • Java 21 Arena Ready</div>
@@ -171,10 +171,13 @@
         const controlsArea = document.getElementById('controlsArea');
         if (room.guestUserId) {
           const guestIcon = document.getElementById('guestIcon');
+          guestIcon.classList.remove('radar-ping-avatar');
           guestIcon.innerHTML = '<i data-lucide="user-check" style="width:36px;height:36px;color:var(--accent-coral);"></i>';
           guestIcon.style.borderColor = 'var(--border-accent)';
-          document.getElementById('guestName').innerText = room.guestUsername;
-          document.getElementById('guestName').style.color = '#ffffff';
+          const guestNameEl = document.getElementById('guestName');
+          guestNameEl.classList.remove('animated-dots');
+          guestNameEl.innerText = room.guestUsername;
+          guestNameEl.style.color = '#ffffff';
           document.getElementById('guestRating').innerText = `${room.guestRating} Elo`;
           document.getElementById('guestRating').className = 'badge badge-medium';
           document.getElementById('guestCard').classList.add('is-ready');
