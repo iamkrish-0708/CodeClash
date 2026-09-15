@@ -42,6 +42,17 @@ const API = {
     });
   },
 
+  async googleLogin(idToken, username = null) {
+    return this.request('/api/auth/google', {
+      method: 'POST',
+      body: JSON.stringify({ idToken, username }),
+    });
+  },
+
+  async getGoogleClientId() {
+    return this.request('/api/auth/google-client-id');
+  },
+
   async logout() {
     return this.request('/api/auth/logout', { method: 'POST' });
   },

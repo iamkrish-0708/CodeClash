@@ -4,11 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login — CodeClash</title>
+  <link rel="icon" type="image/png" href="images/logo.png">
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   <header class="navbar">
@@ -29,7 +32,7 @@
   </header>
 
   <main class="container" style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 170px);">
-    <div class="auth-wrapper">
+    <div class="auth-wrapper" style="max-width: 440px;">
       <div class="auth-header">
         <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--accent-coral-subtle); border: 1px solid var(--border-accent); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: var(--accent-coral);">
           <i data-lucide="log-in" style="width:22px;height:22px;"></i>
@@ -39,6 +42,13 @@
       </div>
 
       <div id="alertBox" class="alert"></div>
+
+      <!-- Google Sign-In Container -->
+      <div id="googleBtnContainer" class="google-btn-container"></div>
+
+      <div class="auth-divider">
+        <span>OR CONTINUE WITH EMAIL</span>
+      </div>
 
       <form id="loginForm">
         <div class="form-group">
@@ -63,6 +73,33 @@
     </div>
   </main>
 
+  <!-- Google Username Onboarding Modal -->
+  <div id="usernameModalOverlay" class="requirements-modal-overlay">
+    <div class="requirements-modal" style="max-width: 440px;">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--accent-coral-subtle); border: 1px solid var(--border-accent); display: flex; align-items: center; justify-content: center; color: var(--accent-coral); flex-shrink: 0;">
+          <i data-lucide="user-check" style="width:20px;height:20px;"></i>
+        </div>
+        <div>
+          <h3 style="font-size: 1.25rem; font-weight: 800; color: #ffffff;">Choose Duelist Handle</h3>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">Pick your player name for ranked 1v1 battles</p>
+        </div>
+      </div>
+      <div id="usernameModalAlert" class="alert" style="display: none; margin-bottom: 1rem;"></div>
+      <div class="form-group" style="margin-top: 1rem;">
+        <label class="form-label" for="googleChosenUsername">Duelist Handle</label>
+        <input type="text" id="googleChosenUsername" class="form-input" placeholder="e.g. byte_master" autocomplete="username">
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem;">3-20 characters, starts with a letter, letters/numbers/_ only</div>
+      </div>
+      <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+        <button type="button" class="btn btn-secondary" onclick="closeUsernameModal()" style="flex: 1;">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmGoogleUserBtn" onclick="submitGoogleUsername()" style="flex: 2;">
+          <i data-lucide="swords" style="width:16px;height:16px;"></i> <span>Enter Arena</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <div class="footer-content">
       <div style="display: flex; align-items: center; gap: 0.45rem;">
@@ -79,6 +116,8 @@
     const form = document.getElementById('loginForm');
     const alertBox = document.getElementById('alertBox');
     const submitBtn = document.getElementById('submitBtn');
+
+    let cachedGoogleIdToken = null;
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -113,6 +152,125 @@
         if (window.lucide) lucide.createIcons();
       }
     });
+
+    // Handle Google Sign-In Response
+    async function handleGoogleCredentialResponse(googleResponse) {
+      if (!googleResponse || !googleResponse.credential) return;
+      alertBox.style.display = 'none';
+
+      try {
+        const result = await API.googleLogin(googleResponse.credential);
+        if (result.success) {
+          alertBox.className = 'alert alert-success';
+          alertBox.innerText = '✓ Google Sign-In successful! Entering the arena...';
+          alertBox.style.display = 'block';
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 600);
+        } else if (result.requireUsername) {
+          // Open username modal
+          cachedGoogleIdToken = result.idToken || googleResponse.credential;
+          const handleInput = document.getElementById('googleChosenUsername');
+          handleInput.value = result.suggestedUsername || '';
+          document.getElementById('usernameModalOverlay').classList.add('active');
+          if (window.lucide) lucide.createIcons();
+        } else {
+          alertBox.className = 'alert alert-error';
+          alertBox.innerText = result.message || 'Google authentication failed';
+          alertBox.style.display = 'block';
+        }
+      } catch (err) {
+        alertBox.className = 'alert alert-error';
+        alertBox.innerText = err.message || 'Google authentication failed';
+        alertBox.style.display = 'block';
+      }
+    }
+
+    function closeUsernameModal() {
+      document.getElementById('usernameModalOverlay').classList.remove('active');
+    }
+
+    async function submitGoogleUsername() {
+      const handleInput = document.getElementById('googleChosenUsername');
+      const chosen = handleInput.value.trim();
+      const modalAlert = document.getElementById('usernameModalAlert');
+      const confirmBtn = document.getElementById('confirmGoogleUserBtn');
+
+      modalAlert.style.display = 'none';
+
+      if (!chosen) {
+        modalAlert.className = 'alert alert-error';
+        modalAlert.innerText = 'Please enter a username';
+        modalAlert.style.display = 'block';
+        return;
+      }
+
+      confirmBtn.disabled = true;
+      confirmBtn.innerText = 'Registering...';
+
+      try {
+        const result = await API.googleLogin(cachedGoogleIdToken, chosen);
+        if (result.success) {
+          modalAlert.className = 'alert alert-success';
+          modalAlert.innerText = '✓ Welcome aboard! Entering arena...';
+          modalAlert.style.display = 'block';
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 600);
+        } else {
+          modalAlert.className = 'alert alert-error';
+          modalAlert.innerText = result.message || 'Could not claim handle';
+          modalAlert.style.display = 'block';
+        }
+      } catch (err) {
+        modalAlert.className = 'alert alert-error';
+        modalAlert.innerText = err.message || 'Registration failed';
+        modalAlert.style.display = 'block';
+      } finally {
+        confirmBtn.disabled = false;
+        confirmBtn.innerHTML = '<i data-lucide="swords" style="width:16px;height:16px;"></i> <span>Enter Arena</span>';
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    // Initialize Google Sign-In Button
+    async function initGoogleAuth() {
+      try {
+        let clientId = '258922497438-asurq360ieu36s8i39b78c13avpmab5c.apps.googleusercontent.com';
+        try {
+          const config = await API.getGoogleClientId();
+          if (config && config.clientId) clientId = config.clientId;
+        } catch (e) {
+          // fallback to client id
+        }
+
+        const checkGsi = setInterval(() => {
+          if (window.google && window.google.accounts && window.google.accounts.id) {
+            clearInterval(checkGsi);
+            google.accounts.id.initialize({
+              client_id: clientId,
+              callback: handleGoogleCredentialResponse,
+              auto_select: false,
+            });
+
+            google.accounts.id.renderButton(
+              document.getElementById('googleBtnContainer'),
+              {
+                theme: 'filled_black',
+                size: 'large',
+                text: 'continue_with',
+                shape: 'pill',
+                width: 320,
+              }
+            );
+          }
+        }, 100);
+      } catch (err) {
+        console.warn('Google GSI init failed:', err);
+      }
+    }
+
+    window.addEventListener('load', initGoogleAuth);
   </script>
 </body>
 </html>

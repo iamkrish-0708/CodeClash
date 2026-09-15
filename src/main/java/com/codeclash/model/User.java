@@ -17,8 +17,11 @@ public class User {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(name = "password_hash", nullable = false)
+    @Column(name = "password_hash", nullable = true)
     private String passwordHash;
+
+    @Column(name = "auth_provider", nullable = false, length = 20)
+    private String authProvider = "LOCAL";
 
     @Column(nullable = false)
     private Integer rating = 1200;
@@ -40,11 +43,12 @@ public class User {
 
     public User() {}
 
-    public User(Long id, String username, String email, String passwordHash, Integer rating, Integer matchesPlayed, Integer wins, Integer losses, Integer draws, LocalDateTime createdAt) {
+    public User(Long id, String username, String email, String passwordHash, String authProvider, Integer rating, Integer matchesPlayed, Integer wins, Integer losses, Integer draws, LocalDateTime createdAt) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;
+        this.authProvider = authProvider != null ? authProvider : "LOCAL";
         this.rating = rating != null ? rating : 1200;
         this.matchesPlayed = matchesPlayed != null ? matchesPlayed : 0;
         this.wins = wins != null ? wins : 0;
@@ -58,6 +62,9 @@ public class User {
         if (createdAt == null) {
             createdAt = LocalDateTime.now();
         }
+        if (authProvider == null) {
+            authProvider = "LOCAL";
+        }
     }
 
     // Builder
@@ -70,6 +77,7 @@ public class User {
         private String username;
         private String email;
         private String passwordHash;
+        private String authProvider = "LOCAL";
         private Integer rating = 1200;
         private Integer matchesPlayed = 0;
         private Integer wins = 0;
@@ -81,6 +89,7 @@ public class User {
         public UserBuilder username(String username) { this.username = username; return this; }
         public UserBuilder email(String email) { this.email = email; return this; }
         public UserBuilder passwordHash(String passwordHash) { this.passwordHash = passwordHash; return this; }
+        public UserBuilder authProvider(String authProvider) { this.authProvider = authProvider; return this; }
         public UserBuilder rating(Integer rating) { this.rating = rating; return this; }
         public UserBuilder matchesPlayed(Integer matchesPlayed) { this.matchesPlayed = matchesPlayed; return this; }
         public UserBuilder wins(Integer wins) { this.wins = wins; return this; }
@@ -89,7 +98,7 @@ public class User {
         public UserBuilder createdAt(LocalDateTime createdAt) { this.createdAt = createdAt; return this; }
 
         public User build() {
-            return new User(id, username, email, passwordHash, rating, matchesPlayed, wins, losses, draws, createdAt);
+            return new User(id, username, email, passwordHash, authProvider, rating, matchesPlayed, wins, losses, draws, createdAt);
         }
     }
 
@@ -102,6 +111,8 @@ public class User {
     public void setEmail(String email) { this.email = email; }
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public String getAuthProvider() { return authProvider; }
+    public void setAuthProvider(String authProvider) { this.authProvider = authProvider; }
     public Integer getRating() { return rating; }
     public void setRating(Integer rating) { this.rating = rating; }
     public Integer getMatchesPlayed() { return matchesPlayed; }

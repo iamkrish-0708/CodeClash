@@ -1,6 +1,7 @@
 package com.codeclash.controller;
 
 import com.codeclash.dto.AuthResponse;
+import com.codeclash.dto.GoogleAuthRequest;
 import com.codeclash.dto.LoginRequest;
 import com.codeclash.dto.RegisterRequest;
 import com.codeclash.dto.UserProfileDto;
@@ -9,6 +10,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -40,6 +43,21 @@ public class AuthController {
             session.setAttribute(SESSION_USERNAME, response.getUsername());
         }
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<AuthResponse> googleAuth(@RequestBody GoogleAuthRequest request, HttpSession session) {
+        AuthResponse response = authService.authenticateGoogleUser(request);
+        if (response.isSuccess()) {
+            session.setAttribute(SESSION_USER_ID, response.getUserId());
+            session.setAttribute(SESSION_USERNAME, response.getUsername());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/google-client-id")
+    public ResponseEntity<Map<String, String>> getGoogleClientId() {
+        return ResponseEntity.ok(Map.of("clientId", authService.getGoogleClientId()));
     }
 
     @PostMapping("/logout")
