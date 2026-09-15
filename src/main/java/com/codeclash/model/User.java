@@ -20,7 +20,7 @@ public class User {
     @Column(name = "password_hash", nullable = true)
     private String passwordHash;
 
-    @Column(name = "auth_provider", nullable = false, length = 20)
+    @Column(name = "auth_provider", nullable = true, length = 20)
     private String authProvider = "LOCAL";
 
     @Column(nullable = false)
