@@ -1,4 +1,4 @@
-// API Client for CodeClash LAN Platform
+// API Client for CodeClash Platform
 const API = {
   async request(endpoint, options = {}) {
     const defaultHeaders = {

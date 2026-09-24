@@ -1,7 +1,7 @@
 @echo off
 setlocal
 echo ===================================================
-echo   Starting CodeClash LAN 1v1 Battle Server...
+echo   Starting CodeClash 1v1 Battle Server...
 echo ===================================================
 echo.
 
