@@ -1,5 +1,5 @@
-# Local Development MySQL Configuration
-# Developers: replace placeholder values or set environment variables for local testing
+# Local Development MySQL Configuration (Template)
+# Copy this file to application-local.properties and set your local database credentials.
 spring.datasource.url=${DATABASE_URL:jdbc:mysql://localhost:3306/codeclash_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
 spring.datasource.username=${DATABASE_USERNAME:root}
 spring.datasource.password=${DATABASE_PASSWORD:YOUR_MYSQL_PASSWORD}

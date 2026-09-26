@@ -737,7 +737,8 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .data-table {
@@ -1392,5 +1393,114 @@ footer {
 .requirement-icon {
   flex-shrink: 0;
   margin-top: 1px;
+}
+
+/* ==========================================================================
+   Responsive Adaptations (Tablet & Mobile Screens - Login, Register, Lobby)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Auth Pages (login.html, register.html) */
+  .auth-wrapper {
+    width: 100%;
+    max-width: 100% !important;
+    margin: 1.5rem auto;
+    padding: 2rem 1.5rem;
+    box-sizing: border-box;
+  }
+
+  /* Lobby Page (lobby.html) */
+  .lobby-stage {
+    padding: 0 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .lobby-matchup-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .vs-circle-simple {
+    margin: 0 auto;
+  }
+
+  .room-code-capsule {
+    width: 100%;
+    max-width: 380px;
+    padding: 1.25rem 1.5rem;
+    margin: 1rem auto 1.75rem;
+    box-sizing: border-box;
+  }
+
+  .room-code-text {
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+
+  .radar-hud-box {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+    padding: 1.25rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Auth Pages (login.html, register.html) */
+  .auth-wrapper {
+    margin: 1rem auto;
+    padding: 1.5rem 1rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .auth-header h2 {
+    font-size: 1.45rem;
+  }
+
+  .auth-header p {
+    font-size: 0.85rem;
+  }
+
+  .form-input {
+    padding: 0.75rem 0.9rem;
+    font-size: 0.9rem;
+  }
+
+  .requirements-modal {
+    padding: 1.5rem 1.15rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .requirement-item {
+    font-size: 0.8rem;
+    padding: 0.55rem 0.7rem;
+  }
+
+  /* Lobby Page (lobby.html) */
+  .lobby-stage h1 {
+    font-size: 1.65rem !important;
+  }
+
+  .player-stage-card {
+    padding: 1.5rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .player-avatar-box {
+    width: 60px;
+    height: 60px;
+  }
+
+  .room-code-capsule {
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  .room-code-text {
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+  }
 }
 

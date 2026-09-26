@@ -65,5 +65,11 @@ out/
 .DS_Store
 Thumbs.db
 
-# Environment variables
+# Environment & Local Secrets
 .env
+application-local.properties
+src/main/resources/application-local.properties
+
+# Database & Local Storage
+data/
+*.mv.db
